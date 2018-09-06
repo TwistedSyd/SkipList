@@ -1,11 +1,16 @@
 <template>
     <div id="app">
+        <section class="hero is-info is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">
+                        Skip List | Jeld-Wen Bend Division
+                    </h1>
+                </div>
+            </div>
+        </section>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <a class="navbar-item" href="/">
-                    Skip List | Jeld-Wen
-                </a>
-
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
@@ -15,14 +20,23 @@
 
             <div class="navbar-menu">
                 <div class="navbar-start">
-                    <router-link to="/about" class="navbar-item">About</router-link>
+                    <div class="navbar-item">
+                        <div class="field is-grouped">
+                            <p class="control">
+                                <router-link to="/dashboard" class="navbar-item button is-link">Production Skips</router-link>
+                            </p>
+                            <p class="control">
+                                <router-link to="/about" class="navbar-item button is-info">About</router-link>
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="field is-grouped" v-if="!isAuthenticated">
                             <p class="control">
-                                <router-link to="/login" class="navbar-item button is-info">Login</router-link>
+                                <router-link to="/" class="navbar-item button is-success">Login</router-link>
                             </p>
                         </div>
                         <div class="field" v-else>
@@ -59,7 +73,7 @@ export default {
                 .then(() => {
                     this.isAuthenticated = false
 
-                    this.$router.push('/login')
+                    this.$router.push('/')
                 })
         }
     }

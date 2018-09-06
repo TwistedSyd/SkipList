@@ -25,7 +25,7 @@ export default {
     },
     firestore() {
         return {
-            categories: db.collection('categories')
+            categories: db.collection('categories').orderBy('flow')
         }
     },
     methods: {
