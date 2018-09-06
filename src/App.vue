@@ -10,14 +10,14 @@
             </div>
         </section>
         <nav class="navbar" role="navigation" aria-label="main navigation">
+            <!--
             <div class="navbar-brand">
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                 </a>
-            </div>
-
+            </div> -->
             <div class="navbar-menu">
                 <div class="navbar-start">
                     <div class="navbar-item">
@@ -36,28 +36,71 @@
                     <div class="navbar-item">
                         <div class="field is-grouped" v-if="!isAuthenticated">
                             <p class="control">
-                                <router-link to="/" class="navbar-item button is-success">Login</router-link>
+                                <router-link to="/" class="navbar-item button is-success">Login Page</router-link>
                             </p>
                         </div>
                         <div class="field" v-else>
-                            <p class="control">
-                                <button @click="logOut" class="button is-danger">Log Out</button>
-                            </p>
+                            <div class="field is-grouped">
+                                <p class="control">
+                                    <button @click="showSkipForm = !showSkipForm" class="button is-primary">Add Skip</button>
+                                </p>
+                                <p class="control">
+                                    <button @click="logOut" class="button is-danger">Log Out</button>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </nav>
+        <div class="modal" :class="{'is-active' : showSkipForm }">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <form @submit.prevent="addSkip">
+                    <div class="field">
+                        <select v-model="category">
+                            <option value="empty" selected>Choose Department</option>
+                            <option v-for="category in categories" :value="category.id" :key="category.title">{{ category.title}}</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input" v-model="title" placeholder="Title">
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input" v-model="item" placeholder="Item #">
+                    </div>
+
+                    <div class="field">
+                        <button class="button is-success">Add</button>
+                    </div>
+
+                </form>
+            </div>
+            <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
+        </div>
         <router-view/>
     </div>
 </template>
+
+
 <script>
 import firebase from 'firebase'
+import { db } from './main'
+
 export default {
-    data () {
+    data() {
         return {
-            isAuthenticated: false
+            categories: [],
+            category: 'empty',
+            isAuthenticated: false,
+            showSkipForm: false,
+            title: '',
+            item: ''
+        }
+    },
+    firestore() {
+        return {
+            categories: db.collection('categories').orderBy('flow')
         }
     },
     created() {
@@ -68,6 +111,23 @@ export default {
         })
     },
     methods: {
+        addSkip() {
+            if(this.title && this.category !== 'empty') {
+                const skip = {
+                    title: this.title,
+                    item: this.item
+                }
+                db.collection('categories').doc(this.category).collection('skips').add(skip)
+                this.title = ''
+                this.item = ''
+                this.category = 'empty'
+                this.showSkipForm = false
+
+            }else{
+                alert('You must fill out all fields!')
+            }
+    
+        },
         logOut() {
             firebase.auth().signOut()
                 .then(() => {
@@ -80,6 +140,7 @@ export default {
 }
 </script>
 
+<!-- CSS style from Bulma: https://bulma.io/extensions/ --> 
 <style>
 @import "../node_modules/bulma/css/bulma.css";
 #app {

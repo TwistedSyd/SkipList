@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
+/* Firebase, firestore and vuefire */
 import firebase from 'firebase'
 import VueFire from 'vuefire'
 import 'firebase/firestore'
@@ -9,6 +11,7 @@ import 'firebase/firestore'
 Vue.config.productionTip = false
 Vue.use(VueFire)
 
+/* Initialize firebase/firestore for project */
 var config = {
     apiKey: "AIzaSyDxvDp0IIGuuJk3FiTuYeMGApH7nCLXgxI",
     authDomain: "skiplist-48b4d.firebaseapp.com",
@@ -17,8 +20,9 @@ var config = {
     storageBucket: "skiplist-48b4d.appspot.com",
     messagingSenderId: "305476120066"
 };
-
 firebase.initializeApp(config);
+
+/* Get database from firebase to use */
 export const db = firebase.firestore()
 
 new Vue({
