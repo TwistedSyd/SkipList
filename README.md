@@ -1,4 +1,4 @@
-# SkipList
+# SkipList TEST
 A web-based app using Vue.js, CSS Bulma, and Firebase Firestore. 
 The app is meant for keep track of 'Skips' in the production line, 
 skips may be added and removed. The purpose of this is to keep track 
