@@ -10,13 +10,20 @@
                 </li>
             </ul>
         </div>
+        <tab-dept 
+            v-for="category in categories"
+            :key="category.id"
+            :category="category.id">
+        </tab-dept>
     </div>
 </template>
 
 <script>
 import { db } from '../main'
+import TabDept from '../components/TabDept.vue'
 export default {
     name: 'dashboard',
+    components: { TabDept },
     data() {
         return {
             categories: [],
