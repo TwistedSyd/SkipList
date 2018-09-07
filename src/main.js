@@ -24,6 +24,8 @@ firebase.initializeApp(config);
 
 /* Get database from firebase to use */
 export const db = firebase.firestore()
+const settings = { timestampsInSnapshots: true }
+db.settings(settings)
 
 new Vue({
     router,
