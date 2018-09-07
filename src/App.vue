@@ -17,9 +17,6 @@
                             <p class="control">
                                 <router-link to="/dashboard" class="navbar-item button is-link">Production Skips</router-link>
                             </p>
-                            <p class="control">
-                                <router-link to="/about" class="navbar-item button is-info">About</router-link>
-                            </p>
                         </div>
                     </div>
                 </div>
