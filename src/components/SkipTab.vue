@@ -5,8 +5,10 @@
             </div>
             <div class="card-content">
                 <div class="">
-                    Title: {{ skip.title }} 
-                    Item #: {{ skip.item }}
+                    Schedule: {{ skip.schedule }} <br>
+                    Sequence: {{ skip.sequence }} <br>
+                    Item #: {{ skip.item }} <br>
+                    Title: {{ skip.title }} <br>
                 </div>
                 <div class="buttons is-right">
                     <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
@@ -34,12 +36,14 @@ export default {
         if(this.$props.category === 'All') {
             for (var i = 0; i < this.$props.categories.length; i++) {
                 const categoryID = this.$props.categories[i].id
-                db.collection('categories').doc(categoryID).collection('skips').orderBy('title').get()
+                db.collection('categories').doc(categoryID).collection('skips').orderBy('schedule').get()
                     .then((querySnapshot) => {
                         querySnapshot.forEach((collection) => {
                             this.skips.push({
                                 title: collection.data().title,
                                 item: collection.data().item,
+                                schedule: collection.data().schedule,
+                                sequence: collection.data().sequence,
                                 id: collection.id, 
                                 category: categoryID
                             })
@@ -50,7 +54,7 @@ export default {
     },
     firestore() {
         return {
-            skips: db.collection('categories').doc(this.$props.category).collection('skips').orderBy('title')
+            skips: db.collection('categories').doc(this.$props.category).collection('skips').orderBy('schedule')
         }
     },
     methods: {

@@ -53,12 +53,17 @@
                         </select>
                     </div>
                     <div class="field">
+                        <input type="text" class="input" v-model="schedule" placeholder="Schedule #">
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input" v-model="sequence" placeholder="Sequence #">
+                    </div>
+                    <div class="field">
                         <input type="text" class="input" v-model="title" placeholder="Title">
                     </div>
                     <div class="field">
                         <input type="text" class="input" v-model="item" placeholder="Item #">
                     </div>
-
                     <div class="field">
                         <button class="button is-success">Add</button>
                     </div>
@@ -84,7 +89,9 @@ export default {
             isAuthenticated: false,
             showSkipForm: false,
             title: '',
-            item: ''
+            item: '',
+            schedule: '',
+            sequence: ''
         }
     },
     firestore() {
@@ -104,11 +111,15 @@ export default {
             if(this.title && this.category !== 'empty') {
                 const skip = {
                     title: this.title,
-                    item: this.item
+                    item: this.item,
+                    schedule: this.schedule,
+                    sequence: this.sequence
                 }
                 db.collection('categories').doc(this.category).collection('skips').add(skip)
                 this.title = ''
                 this.item = ''
+                this.schedule = ''
+                this.sequence = ''
                 this.category = 'empty'
                 this.showSkipForm = false
 
