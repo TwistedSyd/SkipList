@@ -1,7 +1,5 @@
 <template>
     <div>
-
-        <h1>Departments</h1>
         <div class="tabs">
             <ul>
                 <li :class="{ 'is-active' : activeCategory === 'All'}"><a @click="setCategory('All')">All</a></li>
@@ -24,6 +22,23 @@
             :category="category.id"
             v-if="activeCategory == category.title">
         </skip-tab>
+
+        <div class="Message" v-if="activeCategory != 'All'">
+            <article class="message is-danger">
+                <div class="message-header">
+                    <p>This department may be affected by Skips in the following departments:</p>
+                </div>
+                <div class="message-body">
+                </div>
+            </article>
+        </div>
+        <div class="Message" v-else>
+            <article class="message is-info">
+                <div class="message-header">
+                    <p>Skips from all departments:</p>
+                </div>
+            </article>
+        </div>
     </div>
 </template>
 

@@ -34,6 +34,9 @@
                                     <button @click="showSkipForm = !showSkipForm" class="button is-primary">Add Skip</button>
                                 </p>
                                 <p class="control">
+                                    <button @click="completeSkip" class="button is-success">Complete Skip</button>
+                                </p>
+                                <p class="control">
                                     <button @click="logOut" class="button is-danger">Log Out</button>
                                 </p>
                             </div>
@@ -42,10 +45,12 @@
                 </div>
             </div>
         </nav>
+
+
         <div class="modal" :class="{'is-active' : showSkipForm }">
             <div class="modal-background"></div>
             <div class="modal-content">
-                <form @submit.prevent="getTitle">
+                <form @submit.prevent="getTitle" >
 
                     <div class="field">
                         <div class="control">
@@ -93,7 +98,6 @@
             </div>
             <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
         </div>
-        {{reason}} {{otherReason}}
         <router-view/>
     </div>
 </template>
@@ -175,6 +179,9 @@ export default {
 
                     this.$router.push('/')
                 })
+        },
+        completeSkip() {
+            console.log('Complete')
         }
     }
 }

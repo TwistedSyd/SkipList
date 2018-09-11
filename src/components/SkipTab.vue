@@ -11,7 +11,6 @@
                     Item #: {{ skip.item }} <br>
                     # of Unit Affected: {{ skip.units }} <br>
                     Dept: {{ skip.dept }}
-                    {{this}}
                 </div>
                 <div class="buttons is-right">
                     <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
