@@ -47,10 +47,14 @@
             <div class="modal-content">
                 <form @submit.prevent="getTitle">
                     <div class="field">
-                        <select v-model="category">
-                            <option value="empty" selected>Choose Department</option>
-                            <option v-for="category in categories" :value="category.id" :key="category.title">{{ category.title}}</option>
-                        </select> 
+                        <div class="control">
+                            <div class="select">
+                                <select v-model="category">
+                                    <option value="empty" selected>Choose Department</option>
+                                    <option v-for="category in categories" :value="category.id" :key="category.title">{{ category.title}}</option>
+                                </select> 
+                            </div>
+                        </div>
                     </div>
                     <div class="field">
                         <input type="text" class="input" v-model="schedule" placeholder="Schedule #">
@@ -91,7 +95,8 @@ export default {
             title: '',
             item: '',
             schedule: '',
-            sequence: ''
+            sequence: '',
+            dept: ''
         }
     },
     firestore() {
@@ -131,6 +136,7 @@ export default {
                 this.sequence = ''
                 this.category = 'empty'
                 this.showSkipForm = false
+                dept = ''
 
             }else{
                 alert('You must fill out all fields!')

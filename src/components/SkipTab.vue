@@ -9,6 +9,7 @@
                     Sequence: {{ skip.sequence }} <br>
                     Item #: {{ skip.item }} <br>
                     Title: {{ skip.title }} <br>
+                    Dept: {{ skip.dept }}
                     {{this}}
                 </div>
                 <div class="buttons is-right">
@@ -41,6 +42,7 @@ export default {
                     .then((querySnapshot) => {
                         querySnapshot.forEach((collection) => {
                             this.skips.push({
+                                dept: collection.data().dept,
                                 title: collection.data().title,
                                 item: collection.data().item,
                                 schedule: collection.data().schedule,
