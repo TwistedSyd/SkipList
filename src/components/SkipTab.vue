@@ -9,6 +9,7 @@
                     Sequence: {{ skip.sequence }} <br>
                     Item #: {{ skip.item }} <br>
                     Title: {{ skip.title }} <br>
+                    {{this}}
                 </div>
                 <div class="buttons is-right">
                     <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>

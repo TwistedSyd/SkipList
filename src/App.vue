@@ -45,12 +45,12 @@
         <div class="modal" :class="{'is-active' : showSkipForm }">
             <div class="modal-background"></div>
             <div class="modal-content">
-                <form @submit.prevent="addSkip">
+                <form @submit.prevent="getTitle">
                     <div class="field">
                         <select v-model="category">
                             <option value="empty" selected>Choose Department</option>
                             <option v-for="category in categories" :value="category.id" :key="category.title">{{ category.title}}</option>
-                        </select>
+                        </select> 
                     </div>
                     <div class="field">
                         <input type="text" class="input" v-model="schedule" placeholder="Schedule #">
@@ -107,13 +107,22 @@ export default {
         })
     },
     methods: {
-        addSkip() {
+        getTitle() {  
+            db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
+                        const dept = documentSnapshot.data().title
+                        console.log(dept)
+                        this.addSkip(dept)
+            })
+        },
+        addSkip(dept) {
+            console.log(dept)
             if(this.title && this.category !== 'empty') {
                 const skip = {
                     title: this.title,
                     item: this.item,
                     schedule: this.schedule,
-                    sequence: this.sequence
+                    sequence: this.sequence,
+                    dept: dept
                 }
                 db.collection('categories').doc(this.category).collection('skips').add(skip)
                 this.title = ''
