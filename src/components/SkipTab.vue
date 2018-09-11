@@ -5,10 +5,11 @@
             </div>
             <div class="card-content">
                 <div class="">
+                    Reason for Skip: {{ skip.reason }} <br>
                     Schedule: {{ skip.schedule }} <br>
                     Sequence: {{ skip.sequence }} <br>
                     Item #: {{ skip.item }} <br>
-                    Title: {{ skip.title }} <br>
+                    # of Unit Affected: {{ skip.units }} <br>
                     Dept: {{ skip.dept }}
                     {{this}}
                 </div>
@@ -42,11 +43,12 @@ export default {
                     .then((querySnapshot) => {
                         querySnapshot.forEach((collection) => {
                             this.skips.push({
-                                dept: collection.data().dept,
-                                title: collection.data().title,
-                                item: collection.data().item,
+                                reason: collection.data().reason,
                                 schedule: collection.data().schedule,
                                 sequence: collection.data().sequence,
+                                item: collection.data().item,
+                                units: collection.data().units,
+                                dept: collection.data().dept,
                                 id: collection.id, 
                                 category: categoryID
                             })

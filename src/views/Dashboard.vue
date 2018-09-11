@@ -51,7 +51,7 @@ export default {
         setCategory(title) {
             this.activeCategory = title
         }
-    }
+    },
 }
 </script>
 

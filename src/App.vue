@@ -46,28 +46,45 @@
             <div class="modal-background"></div>
             <div class="modal-content">
                 <form @submit.prevent="getTitle">
+
                     <div class="field">
                         <div class="control">
                             <div class="select">
                                 <select v-model="category">
-                                    <option value="empty" selected>Choose Department</option>
+                                    <option value="empty" selected="true" disabled>Choose Department</option>
                                     <option v-for="category in categories" :value="category.id" :key="category.title">{{ category.title}}</option>
                                 </select> 
                             </div>
                         </div>
                     </div>
+
                     <div class="field">
-                        <input type="text" class="input" v-model="schedule" placeholder="Schedule #">
+                        <div class="control">
+                            <div class="select">
+                                <select v-model="reason">
+                                    <option value="" selected disabled>Reason for Skip</option>
+                                    <option v-for="reason in reasons" :value="reason" :key="reason">{{ reason }}</option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                        <div class="field" v-if="reason == 'Other'">
+                            <input type="text" class="input is-info" v-model="otherReason" placeholder="Reason for Skip: Other">
+                        </div>
+
+                    <div class="field">
+                        <input type="text" class="input is-primary" v-model="schedule" placeholder="Schedule #">
                     </div>
                     <div class="field">
-                        <input type="text" class="input" v-model="sequence" placeholder="Sequence #">
+                        <input type="text" class="input is-primary" v-model="sequence" placeholder="Sequence #">
                     </div>
                     <div class="field">
-                        <input type="text" class="input" v-model="title" placeholder="Title">
+                        <input type="text" class="input is-primary" v-model="item" placeholder="Item #">
                     </div>
                     <div class="field">
-                        <input type="text" class="input" v-model="item" placeholder="Item #">
+                        <input type="number" class="input is-primary" v-model="units" placeholder="# of Units Affected">
                     </div>
+
                     <div class="field">
                         <button class="button is-success">Add</button>
                     </div>
@@ -76,6 +93,7 @@
             </div>
             <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
         </div>
+        {{reason}} {{otherReason}}
         <router-view/>
     </div>
 </template>
@@ -88,14 +106,18 @@ import { db } from './main'
 export default {
     data() {
         return {
+            reasons: ['Material Shortage', 'Damaged Material', 'Powder Coat', 'Other'],
+            reason: '',
+            otherReason: '',
             categories: [],
             category: 'empty',
             isAuthenticated: false,
             showSkipForm: false,
-            title: '',
-            item: '',
+
             schedule: '',
             sequence: '',
+            item: '',
+            units: null,
             dept: ''
         }
     },
@@ -115,29 +137,32 @@ export default {
         getTitle() {  
             db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
                         const dept = documentSnapshot.data().title
-                        console.log(dept)
                         this.addSkip(dept)
             })
         },
         addSkip(dept) {
-            console.log(dept)
-            if(this.title && this.category !== 'empty') {
+            if(this.category !== 'empty') {
+                if(this.reason == 'Other'){
+                    this.reason = 'Other: ' + this.otherReason
+                }
                 const skip = {
-                    title: this.title,
-                    item: this.item,
+                    reason: this.reason,
                     schedule: this.schedule,
                     sequence: this.sequence,
+                    item: this.item,
+                    units: this.units,
                     dept: dept
                 }
                 db.collection('categories').doc(this.category).collection('skips').add(skip)
-                this.title = ''
-                this.item = ''
+                this.reason = ''
                 this.schedule = ''
                 this.sequence = ''
+                this.item = ''
+                this.units = null
+                dept = ''
                 this.category = 'empty'
                 this.showSkipForm = false
-                dept = ''
-
+                this.$router.push('/')
             }else{
                 alert('You must fill out all fields!')
             }
