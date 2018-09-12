@@ -39,6 +39,7 @@
             :category="category.id"
             v-if="activeCategory == category.title">
         </skip-tab>
+
         <div class="Message" v-if="activeCategory != 'All'">
             <article class="message is-success">
                 <div class="message-header">
@@ -66,7 +67,7 @@ import EventBus from '../event-bus'
 export default {
     name: 'dashboard',
     components: {
-        SkipTab
+        SkipTab,
     },
     data() {
         return {

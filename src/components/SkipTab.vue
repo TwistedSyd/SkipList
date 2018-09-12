@@ -1,14 +1,16 @@
 <template>
     <div>
-        <div class="card" v-for="skip in skips" :key="skip.id">
+        <div class="card" v-for="skip in skips" :key="skip.id" v-if="skip.completed == false">
             <div class="card-content">
+                <p>HEADER</p>
                 <div class="">
                     Reason for Skip: {{ skip.reason }} <br>
                     Schedule: {{ skip.schedule }} <br>
                     Sequence: {{ skip.sequence }} <br>
                     Item #: {{ skip.item }} <br>
                     # of Unit Affected: {{ skip.units }} <br>
-                    Dept: {{ skip.dept }}
+                    Dept: {{ skip.dept }} <br>
+                    Complete: {{ skip.completed }}
                 </div>
                 <div class="buttons is-right">
                     <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
@@ -31,7 +33,8 @@ export default {
     },
     data() {
         return {
-            skips: []
+            skips: [],
+            selected: ''
         }
     },
     mounted() {
@@ -48,6 +51,7 @@ export default {
                                 item: collection.data().item,
                                 units: collection.data().units,
                                 dept: collection.data().dept,
+                                completed: collection.data().completed,
                                 id: collection.id, 
                                 category: categoryID
                             })
@@ -63,7 +67,9 @@ export default {
     },
     methods: {
         selectSkip(skip) {
-            console.log('Select')
+            this.selected = true
+            console.log('Selected: ' + skip.id)
+            EventBus.$emit('Test', skip)
         },
         deleteSkip(skip) {
             if(this.$props.category === 'All') {

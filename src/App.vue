@@ -98,6 +98,7 @@
             </div>
             <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
         </div>
+        Selected: {{ this.selectedSkip }}
         <router-view/>
     </div>
 </template>
@@ -116,6 +117,8 @@ export default {
             otherReason: '',
             categories: [],
             category: 'empty',
+            parent: '',
+            selectedSkip: '',
             isAuthenticated: false,
             showSkipForm: false,
 
@@ -138,6 +141,12 @@ export default {
             }
         })
     },
+    mounted() {
+        EventBus.$on('Test', data => {
+            this.selectedSkip = data
+            console.log(this.selectedSkip)
+        })     
+    },
     methods: {
         getTitle() {  
             db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
@@ -156,7 +165,9 @@ export default {
                     sequence: this.sequence,
                     item: this.item,
                     units: this.units,
-                    dept: dept
+                    dept: dept,
+                    completed: false,
+                    parent: this.category
                 }
                 db.collection('categories').doc(this.category).collection('skips').add(skip)
                 this.reason = ''
@@ -177,17 +188,18 @@ export default {
             console.log('Edit')
         },
         completeSkip() {
-            console.log('Complete')
+            this.selectedSkip.completed = true
+            db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
+                completed: true
+            })
         },
         logOut() {
             firebase.auth().signOut()
                 .then(() => {
                     this.isAuthenticated = false
-
                     this.$router.push('/')
                 })
         }
-  
     }
 }
 </script>
