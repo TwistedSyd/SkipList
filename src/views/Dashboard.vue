@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="tabs">
+        <div class="tabs" id="sidebar">
             <ul>
                 <li :class="{ 'is-active' : activeCategory === 'All'}"><a @click="setCategory('All')">All</a></li>
                 <li v-for="category in categories" :key="category.title" :class="{ 'is-active' : activeCategory === category.title}">
@@ -8,21 +8,9 @@
                 </li>
             </ul>
         </div>
-
-        <skip-tab
-            category="All"
-            v-if="activeCategory == 'All'"
-            :categories="categories">
-
-        </skip-tab>
-
-        <skip-tab
-            v-for="category in categories"
-            :key="category.id"
-            :category="category.id"
-            v-if="activeCategory == category.title">
-        </skip-tab>
-
+        <div v-if="activeCategory == ''">
+            Please select an option above to view skips.
+        </div>
         <div class="Message" v-if="activeCategory != 'All'">
             <article class="message is-danger">
                 <div class="message-header">
@@ -39,12 +27,41 @@
                 </div>
             </article>
         </div>
+        <skip-tab
+            category="All"
+            v-if="activeCategory == 'All'"
+            :categories="categories">
+        </skip-tab>
+
+        <skip-tab
+            v-for="category in categories"
+            :key="category.id"
+            :category="category.id"
+            v-if="activeCategory == category.title">
+        </skip-tab>
+        <div class="Message" v-if="activeCategory != 'All'">
+            <article class="message is-success">
+                <div class="message-header">
+                    <p>Completed Skips from this department:</p>
+                </div>
+                <div class="message-body">
+                </div>
+            </article>
+        </div>
+        <div class="Message" v-else>
+            <article class="message is-success">
+                <div class="message-header">
+                    <p>Completed Skips from all departments:</p>
+                </div>
+            </article>
+        </div>
     </div>
 </template>
 
 <script>
 import { db } from '../main'
 import SkipTab from '../components/SkipTab.vue'
+import EventBus from '../event-bus'
 
 export default {
     name: 'dashboard',
@@ -53,7 +70,7 @@ export default {
     },
     data() {
         return {
-            activeCategory: 'All',
+            activeCategory: '',
             categories: []
         }
     },
@@ -69,4 +86,3 @@ export default {
     },
 }
 </script>
-

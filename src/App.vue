@@ -13,9 +13,9 @@
             <div class="navbar-menu">
                 <div class="navbar-start">
                     <div class="navbar-item">
-                        <div class="field is-grouped">
+                        <div class="field is-grouped" v-if="isAuthenticated">
                             <p class="control">
-                                <router-link to="/dashboard" class="navbar-item button is-link">Production Skips</router-link>
+                                <button @click="logOut" class="button is-danger">Log Out</button>
                             </p>
                         </div>
                     </div>
@@ -24,9 +24,9 @@
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="field is-grouped" v-if="!isAuthenticated">
-                            <p class="control">
+                            <!--<p class="control">
                                 <router-link to="/" class="navbar-item button is-success">Login Page</router-link>
-                            </p>
+                            </p>-->
                         </div>
                         <div class="field" v-else>
                             <div class="field is-grouped">
@@ -34,10 +34,10 @@
                                     <button @click="showSkipForm = !showSkipForm" class="button is-primary">Add Skip</button>
                                 </p>
                                 <p class="control">
-                                    <button @click="completeSkip" class="button is-success">Complete Skip</button>
+                                    <button @click="editSkip" class="button is-info">Edit Skip</button>
                                 </p>
                                 <p class="control">
-                                    <button @click="logOut" class="button is-danger">Log Out</button>
+                                    <button @click="completeSkip" class="button is-success">Complete Skip</button>
                                 </p>
                             </div>
                         </div>
@@ -106,6 +106,7 @@
 <script>
 import firebase from 'firebase'
 import { db } from './main'
+import EventBus from './event-bus'
 
 export default {
     data() {
@@ -172,6 +173,12 @@ export default {
             }
     
         },
+        editSkip() {
+            console.log('Edit')
+        },
+        completeSkip() {
+            console.log('Complete')
+        },
         logOut() {
             firebase.auth().signOut()
                 .then(() => {
@@ -179,10 +186,8 @@ export default {
 
                     this.$router.push('/')
                 })
-        },
-        completeSkip() {
-            console.log('Complete')
         }
+  
     }
 }
 </script>

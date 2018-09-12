@@ -1,8 +1,6 @@
 <template>
     <div>
         <div class="card" v-for="skip in skips" :key="skip.id">
-            <div class="card-image">
-            </div>
             <div class="card-content">
                 <div class="">
                     Reason for Skip: {{ skip.reason }} <br>
@@ -14,6 +12,7 @@
                 </div>
                 <div class="buttons is-right">
                     <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
+                    <a @click="selectSkip(skip)" class="button is-warning">Select Skip</a>
                 </div>
             </div>
         </div>
@@ -22,6 +21,7 @@
 
 <script>
 import { db } from "../main"
+import EventBus from '../event-bus'
 
 export default {
     name: 'SkipTab',
@@ -62,7 +62,10 @@ export default {
         }
     },
     methods: {
-        deleteSkip (skip) {
+        selectSkip(skip) {
+            console.log('Select')
+        },
+        deleteSkip(skip) {
             if(this.$props.category === 'All') {
                 db.collection('categories').doc(skip.category).collection('skips').doc(skip.id).delete()
 
