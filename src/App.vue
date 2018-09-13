@@ -20,13 +20,9 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="field is-grouped" v-if="!isAuthenticated">
-                            <!--<p class="control">
-                                <router-link to="/" class="navbar-item button is-success">Login Page</router-link>
-                            </p>-->
                         </div>
                         <div class="field" v-else>
                             <div class="field is-grouped">
@@ -46,12 +42,10 @@
             </div>
         </nav>
 
-
         <div class="modal" :class="{'is-active' : showSkipForm }">
             <div class="modal-background"></div>
             <div class="modal-content">
-                <form @submit.prevent="getTitle" >
-
+                <form @submit.prevent="getTitle">
                     <div class="field">
                         <div class="control">
                             <div class="select">
@@ -62,7 +56,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="field">
                         <div class="control">
                             <div class="select">
@@ -89,16 +82,14 @@
                     <div class="field">
                         <input type="number" class="input is-primary" v-model="units" placeholder="# of Units Affected">
                     </div>
-
                     <div class="field">
                         <button class="button is-success">Add</button>
                     </div>
-
                 </form>
             </div>
             <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
         </div>
-        Selected: {{ this.selectedSkip }}
+        Selected: {{ this.selectedSkip }} {{this.selectedSkip.id}}
         <router-view/>
     </div>
 </template>
@@ -126,7 +117,7 @@ export default {
             sequence: '',
             item: '',
             units: null,
-            dept: ''
+            dept: '',
         }
     },
     firestore() {

@@ -2,8 +2,10 @@
     <div>
         <div class="card" v-for="skip in skips" :key="skip.id" v-if="skip.completed == true">
             <div class="card-content">
-                <p>HEADER</p>
                 <div class="">
+                    <div class="" v-if="skip.id == selected">
+                        I am selected
+                    </div>
                     Reason for Skip: {{ skip.reason }} <br>
                     Schedule: {{ skip.schedule }} <br>
                     Sequence: {{ skip.sequence }} <br>
@@ -14,7 +16,7 @@
                 </div>
                 <div class="buttons is-right">
                     <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
-                    <a @click="selectSkip(skip)" class="button is-warning">Select Skip</a>
+                    <a @click="selectSkip(skip)" class="button is-info">Select Skip</a>
                 </div>
             </div>
         </div>
@@ -39,6 +41,9 @@ export default {
     },
     mounted() {
         this.initAll()
+        EventBus.$on('Select', data => {
+            this.selected = data.id
+        })   
     },
     firestore() {
         return {
@@ -47,7 +52,7 @@ export default {
     },
     methods: {
         selectSkip(skip) {
-            this.selected = true
+            this.selected = skip.id
             console.log('Selected: ' + skip.id)
             EventBus.$emit('Select', skip)
         },
