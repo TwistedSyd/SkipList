@@ -1,6 +1,7 @@
 <template>
     <div class="columns">
         <div class="column is-4 is-offset-4">
+            <!-- Login page and form -->
             <h1 class="title">Login</h1>
             <form @submit.prevent="login"><br>
                 <div class="field">
@@ -18,7 +19,7 @@
                         <button class="button is-success">Login</button>
                     </div>
                 </div>
-
+                <!-- Login error message (incorrect credentials) -->
                 <article class="message is-danger" v-if="error">
                     <div class="message-body">
                         {{ error}}

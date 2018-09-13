@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <!-- Header for whole page -->
         <section class="hero is-info is-bold">
             <div class="hero-body">
                 <div class="container">
@@ -9,6 +10,8 @@
                 </div>
             </div>
         </section>
+
+        <!-- Navigation bar, for buttons such as: Login, Log Out, Add Skip, etc -->
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-menu">
                 <div class="navbar-start">
@@ -42,6 +45,7 @@
             </div>
         </nav>
 
+        <!-- Add skip form -->
         <div class="modal" :class="{'is-active' : showSkipForm }">
             <div class="modal-background"></div>
             <div class="modal-content">
@@ -132,18 +136,21 @@ export default {
         })
     },
     mounted() {
+        /* Catches or sends data via the Event Bus */
         EventBus.$on('Select', data => {
             this.selectedSkip = data
         })   
     },
     methods: {
-        getTitle() {  
+        getTitle() { 
+            /* Gets the catgeory title (department) of the skip to be added */ 
             db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
                         const dept = documentSnapshot.data().title
                         this.addSkip(dept)
             })
         },
         addSkip(dept) {
+            /* Adds skip to Firebase/Firestore */
             if(this.category !== 'empty') {
                 if(this.reason == 'Other'){
                     this.reason = 'Other: ' + this.otherReason
@@ -159,6 +166,7 @@ export default {
                     parent: this.category
                 }
                 db.collection('categories').doc(this.category).collection('skips').add(skip)
+                /* Make sure to erase form data after skip is added */
                 this.reason = ''
                 this.schedule = ''
                 this.sequence = ''
@@ -174,15 +182,18 @@ export default {
     
         },
         editSkip() {
+            /* TODO: Edit skip data and update in Firebase/Firestore */
             console.log('Edit')
         },
         completeSkip() {
+            /* Assigns skip as complete */
             this.selectedSkip.completed = true
             db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
                 completed: true
             })
         },
         logOut() {
+            /* Log user out */
             firebase.auth().signOut()
                 .then(() => {
                     this.isAuthenticated = false
@@ -192,7 +203,6 @@ export default {
     }
 }
 </script>
-
 <!-- CSS style from Bulma: https://bulma.io/extensions/ --> 
 <style lang="scss">
 @import "../node_modules/bulma/css/bulma.css";

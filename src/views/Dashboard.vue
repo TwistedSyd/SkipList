@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- Dashboard view, selectedable departments listed here -->
         <div v-if="activeCategory == ''">
             Please select an option below to view skips.
         </div>
@@ -11,6 +12,7 @@
                 </li>
             </ul>
         </div>
+        <!-- Header for skips that may affect up/downline departments -->
         <div class="Message" v-if="activeCategory != 'All'">
             <article class="message is-danger">
                 <div class="message-header">
@@ -20,6 +22,7 @@
                 </div>
             </article>
         </div>
+        <!-- Header for 'All' skips that are NOT completed -->
         <div class="Message" v-else>
             <article class="message is-info">
                 <div class="message-header">
@@ -29,19 +32,23 @@
                 </div>
             </article>
         </div>
+        <!-- List of skips in the 'All' category
+             pulled from the SkipTab component -->
         <skip-tab
             category="All"
             v-if="activeCategory == 'All'"
             :categories="categories">
         </skip-tab>
-
+        <!-- List of skips in particular department
+             pulled from SkipTab component -->
         <skip-tab
             v-for="category in categories"
             :key="category.id"
             :category="category.id"
             v-if="activeCategory == category.title">
         </skip-tab>
-
+        <!-- Header for particular category, skips that ARE completed
+             pulled from CompleteTab -->
         <div class="Message" v-if="activeCategory != 'All'">
             <article class="message is-success">
                 <div class="message-header">
@@ -51,6 +58,7 @@
                 </div>
             </article>
         </div>
+        <!-- Header for 'All' category, ALL skips that ARE completed -->
         <div class="Message" v-else>
             <article class="message is-success">
                 <div class="message-header">
@@ -60,13 +68,15 @@
                 </div>
             </article>
         </div>
-
+        <!-- List of skips in the 'All' category
+             pulled from the CompleteTab component -->
         <complete-tab
             category="All"
             v-if="activeCategory == 'All'"
             :categories="categories">
         </complete-tab>
-
+        <!-- List of skips in particular department
+             pulled from the CompleteTab component -->
         <complete-tab
             v-for="category in categories"
             :key="category.title"
@@ -101,6 +111,8 @@ export default {
     },
     methods: {
         setCategory(title) {
+            /* Set the current department that is selected in the 
+               dashboard view */
             this.activeCategory = title
         }
     },

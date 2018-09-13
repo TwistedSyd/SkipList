@@ -1,5 +1,7 @@
 <template>
     <div>
+        <!-- Card component, each skip is listed in its own card, 
+             all skip informatin is listed here -->
         <div class="card" v-for="skip in skips" :key="skip.id" v-if="skip.completed == false">
             <div class="card-content">        
                 <div class="">
@@ -52,11 +54,14 @@ export default {
     },
     methods: {
         selectSkip(skip) {
+            /* Selects a skip to either edit, or complete */
             this.selected = skip.id
             console.log('Selected: ' + skip.id)
             EventBus.$emit('Select', skip)
         },
         deleteSkip(skip) {
+            /* Removes skip from database, if selected from 'All' category
+               make sure to remove properly */
             if(this.$props.category === 'All') {
                 db.collection('categories').doc(skip.category).collection('skips').doc(skip.id).delete()
 
@@ -73,6 +78,7 @@ export default {
             }
         },
         initAll() {
+            /* Lists skips from all departments (categories) */
             if(this.$props.category === 'All') {
                 for (var i = 0; i < this.$props.categories.length; i++) {
                     const categoryID = this.$props.categories[i].id

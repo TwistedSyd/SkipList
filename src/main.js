@@ -27,6 +27,8 @@ export const db = firebase.firestore()
 const settings = { timestampsInSnapshots: true }
 db.settings(settings)
 
+/* Need to use this .scss file for 
+   customized Bulma variables */
 require("./assets/main.scss")
 
 new Vue({
