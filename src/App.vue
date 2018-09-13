@@ -142,10 +142,9 @@ export default {
         })
     },
     mounted() {
-        EventBus.$on('Test', data => {
+        EventBus.$on('Select', data => {
             this.selectedSkip = data
-            console.log(this.selectedSkip)
-        })     
+        })   
     },
     methods: {
         getTitle() {  

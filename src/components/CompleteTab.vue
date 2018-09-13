@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="card" v-for="skip in skips" :key="skip.id" v-if="skip.completed == false">
+        <div class="card" v-for="skip in skips" :key="skip.id" v-if="skip.completed == true">
             <div class="card-content">
                 <p>HEADER</p>
                 <div class="">
