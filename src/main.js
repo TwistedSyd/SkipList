@@ -27,6 +27,8 @@ export const db = firebase.firestore()
 const settings = { timestampsInSnapshots: true }
 db.settings(settings)
 
+require("./assets/main.scss")
+
 new Vue({
     router,
     store,
