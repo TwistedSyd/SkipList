@@ -10,6 +10,7 @@ import 'firebase/firestore'
 
 Vue.config.productionTip = false
 Vue.use(VueFire)
+require("./assets/main.scss")
 
 /* Initialize firebase/firestore for project */
 var config = {
@@ -26,10 +27,6 @@ firebase.initializeApp(config);
 export const db = firebase.firestore()
 const settings = { timestampsInSnapshots: true }
 db.settings(settings)
-
-/* Need to use this .scss file for 
-   customized Bulma variables */
-require("./assets/main.scss")
 
 new Vue({
     router,

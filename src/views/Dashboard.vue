@@ -1,12 +1,14 @@
 <template>
     <div>
         <!-- Dashboard view, selectedable departments listed here -->
-        <div v-if="activeCategory == ''">
-            Please select an option below to view skips.
-        </div>
+        <!-- <div v-if="activeCategory == ''">
+            Please select a department or 'All' below to view skips.
+        </div> -->
         <div class="tabs" id="sidebar">
             <ul>
-                <li :class="{ 'is-active' : activeCategory === 'All'}"><a @click="setCategory('All')">All</a></li>
+                <li :class="{ 'is-active' : activeCategory === 'All'}">
+                    <a @click="setCategory('All')">All</a>
+                </li>
                 <li v-for="category in categories" :key="category.title" :class="{ 'is-active' : activeCategory === category.title}">
                     <a @click="setCategory(category.title)">{{ category.title }}</a>
                 </li>
@@ -100,7 +102,7 @@ export default {
     },
     data() {
         return {
-            activeCategory: '',
+            activeCategory: 'All',
             categories: []
         }
     },

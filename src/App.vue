@@ -30,7 +30,9 @@
                         <div class="field" v-else>
                             <div class="field is-grouped">
                                 <p class="control">
-                                    <button @click="showSkipForm = !showSkipForm" class="button is-primary">Add Skip</button>
+                                    <router-link to="/">
+                                        <button @click="showSkipForm = !showSkipForm" class="button is-primary">Add Skip</button>
+                                    </router-link>
                                 </p>
                                 <p class="control">
                                     <button @click="editSkip" class="button is-info">Edit Skip</button>
@@ -47,6 +49,54 @@
 
         <!-- Add skip form -->
         <div class="modal" :class="{'is-active' : showSkipForm }">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <form @submit.prevent="getTitle">
+                    <div class="field">
+                        <div class="control">
+                            <div class="select">
+                                <select v-model="category">
+                                    <option value="empty" selected="true" disabled>Choose Department</option>
+                                    <option v-for="category in categories" :value="category.id" :key="category.title">{{ category.title}}</option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <div class="select">
+                                <select v-model="reason">
+                                    <option value="" selected disabled>Reason for Skip</option>
+                                    <option v-for="reason in reasons" :value="reason" :key="reason">{{ reason }}</option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                        <div class="field" v-if="reason == 'Other'">
+                            <input type="text" class="input is-info" v-model="otherReason" placeholder="Reason for Skip: Other">
+                        </div>
+
+                    <div class="field">
+                        <input type="text" class="input is-primary" v-model="schedule" placeholder="Schedule #">
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input is-primary" v-model="sequence" placeholder="Sequence #">
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input is-primary" v-model="item" placeholder="Item #">
+                    </div>
+                    <div class="field">
+                        <input type="number" class="input is-primary" v-model="units" placeholder="# of Units Affected">
+                    </div>
+                    <div class="field">
+                        <button class="button is-success">Add</button>
+                    </div>
+                </form>
+            </div>
+            <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
+        </div>
+    <!-- Edit skip form -->
+    <div class="modal" :class="{'is-active' : showSkipForm }">
             <div class="modal-background"></div>
             <div class="modal-content">
                 <form @submit.prevent="getTitle">
@@ -187,10 +237,15 @@ export default {
         },
         completeSkip() {
             /* Assigns skip as complete */
-            this.selectedSkip.completed = true
-            db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
-                completed: true
-            })
+            if(this.selectedSkip != ''){
+                this.selectedSkip.completed = true
+                db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
+                    completed: true
+                })
+                this.$router.push('/')
+            }else{
+                alert("You must select a skip to complete it!")
+            }
         },
         logOut() {
             /* Log user out */
@@ -203,7 +258,8 @@ export default {
     }
 }
 </script>
+
 <!-- CSS style from Bulma: https://bulma.io/extensions/ --> 
 <style lang="scss">
-@import "../node_modules/bulma/css/bulma.css";
+@import "./assets/main.scss";
 </style>
