@@ -21,6 +21,9 @@
                     <p>This department may be affected by Skips in the following departments:</p>
                 </div>
                 <div class="message-body">
+                    <li v-for="depts in dependants" :key="depts">
+                        {{ depts }}
+                    </li>
                 </div>
             </article>
         </div>
@@ -103,7 +106,8 @@ export default {
     data() {
         return {
             activeCategory: 'All',
-            categories: []
+            categories: [],
+            dependants: ['Sex', 'Drugs', 'Rock n Roll']
         }
     },
     firestore() {
