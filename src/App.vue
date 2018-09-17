@@ -156,21 +156,21 @@ import EventBus from './event-bus'
 export default {
     data() {
         return {
-            reasons: ['Material Shortage', 'Damaged Material', 'Powder Coat', 'Other'],
-            reason: '',
-            otherReason: '',
-            categories: [],
-            category: 'empty',
-            parent: '',
-            selectedSkip: '',
             isAuthenticated: false,
             showSkipForm: false,
+            categories: [],
+            category: 'empty',
 
+            selectedSkip: '',
+            parent: '',
             schedule: '',
             sequence: '',
             item: '',
             units: null,
             dept: '',
+            reasons: ['Material Shortage', 'Damaged Material', 'Powder Coat', 'Other'],
+            reason: '',
+            otherReason: '',
         }
     },
     firestore() {
@@ -190,6 +190,9 @@ export default {
         EventBus.$on('Select', data => {
             this.selectedSkip = data
         })   
+        EventBus.$on('selectNone', () => {
+            this.selectedSkip = ''
+        })
     },
     methods: {
         getTitle() { 
@@ -206,23 +209,26 @@ export default {
                     this.reason = 'Other: ' + this.otherReason
                 }
                 const skip = {
-                    reason: this.reason,
+
+                    parent: this.category,
                     schedule: this.schedule,
                     sequence: this.sequence,
                     item: this.item,
                     units: this.units,
                     dept: dept,
+                    reason: this.reason,
                     completed: false,
-                    parent: this.category
                 }
                 db.collection('categories').doc(this.category).collection('skips').add(skip)
                 /* Make sure to erase form data after skip is added */
-                this.reason = ''
+
                 this.schedule = ''
                 this.sequence = ''
                 this.item = ''
                 this.units = null
+                this.reason = ''
                 dept = ''
+
                 this.category = 'empty'
                 this.showSkipForm = false
                 this.$router.push('/')

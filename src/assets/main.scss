@@ -1,3 +1,7 @@
+.tabs {
+    height: 4em;
+    padding-bottom: 0;
+}
 #select {
     background-color: rgba(44, 86, 177, 0.3);
     border-radius: 4px;
@@ -6,3 +10,4 @@
     border-color: rgb(0,67,105);
 }
 @import "~bulma/bulma";
+@import "~bulma-badge/dist/css/bulma-badge";

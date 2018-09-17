@@ -4,15 +4,17 @@
         <!-- <div v-if="activeCategory == ''">
             Please select a department or 'All' below to view skips.
         </div> -->
-        <div class="tabs" id="sidebar">
+        <div id="test">
+        <div class="tabs is-toggle">
             <ul>
                 <li :class="{ 'is-active' : activeCategory === 'All'}">
                     <a @click="setCategory('All')">All</a>
                 </li>
                 <li v-for="category in categories" :key="category.title" :class="{ 'is-active' : activeCategory === category.title}">
-                    <a @click="setCategory(category.title)">{{ category.title }}</a>
+                    <a @click="setCategory(category.title)">{{ category.title }} &nbsp;&nbsp;<p class="badge is-badge- is-medium" data-badge="8"></p></a>
                 </li>
             </ul>
+        </div>
         </div>
         <!-- Header for skips that may affect up/downline departments -->
         <div class="Message" v-if="activeCategory != 'All'">
@@ -120,6 +122,7 @@ export default {
             /* Set the current department that is selected in the 
                dashboard view */
             this.activeCategory = title
+            EventBus.$emit('selectNone')
         }
     },
 }
