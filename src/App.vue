@@ -195,7 +195,7 @@ export default {
         })
     },
     methods: {
-        getTitle() { 
+        getTitle() { /* ROUTES TO ADDSKIP() */
             /* Gets the catgeory title (department) of the skip to be added */  
             db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
                         const skipCount = documentSnapshot.data().count
@@ -204,12 +204,16 @@ export default {
 
             })
         },
-        getCount() {
-            db.collection('categories').doc(this.selectedSkip.parent).get().then((documentSnapshot) => {
-                        const skipCount = documentSnapshot.data().count
-                        this.completeSkip(skipCount)
+        getCount() { /* ROUTES TO COMPLETESKIP() */
+            if(this.selectedSkip != ''){
+                db.collection('categories').doc(this.selectedSkip.parent).get().then((documentSnapshot) => {
+                    const skipCount = documentSnapshot.data().count
+                    this.completeSkip(skipCount)
 
-            })
+                }) 
+            }else{
+                alert("You must select a skip to complete it!")
+            }
         },
         addSkip(dept, skipCount) {
             /* Adds skip to Firebase/Firestore */
@@ -250,23 +254,23 @@ export default {
         },
         editSkip() {
             /* TODO: Edit skip data and update in Firebase/Firestore */
-            console.log('Edit')
+            if(this.selectedSkip != ''){
+                console.log('Edit' + this.selectedSkip)
+            }else{
+                alert("You must select a skip to edit it!")
+            }
         },
         completeSkip(skipCount) {
             /* Assigns skip as complete */
-            if(this.selectedSkip != ''){
-                this.selectedSkip.completed = true
-                db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
-                    completed: true
-                })
-                db.collection('categories').doc(this.selectedSkip.parent).update({
-                     count: skipCount - 1
-                }) 
-                this.selectedSkip = ''
-                this.$router.push('/')
-            }else{
-                alert("You must select a skip to complete it!")
-            }
+            this.selectedSkip.completed = true
+            db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
+                completed: true
+            })
+            db.collection('categories').doc(this.selectedSkip.parent).update({
+                    count: skipCount - 1
+            }) 
+            this.selectedSkip = ''
+            this.$router.push('/')
         },
         logOut() {
             /* Log user out */

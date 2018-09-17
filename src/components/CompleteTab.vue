@@ -7,12 +7,12 @@
                 <div id="select">
                     <div class="card-content">        
                         <div class="">
-                            Reason for Skip: {{ skip.reason }} <br>
-                            Schedule: {{ skip.schedule }} <br>
-                            Sequence: {{ skip.sequence }} <br>
-                            Item #: {{ skip.item }} <br>
-                            # of Unit Affected: {{ skip.units }} <br>
-                            Dept: {{ skip.dept }} <br>
+                            <strong> Schedule: </strong> {{ skip.schedule }} <br>
+                            <strong> Sequence: </strong> {{ skip.sequence }} <br>
+                            <strong> Item #: </strong> {{ skip.item }} <br>
+                            <strong> # of Units Affected: </strong> {{ skip.units }} <br>
+                            <strong> Reason for Skip: </strong> {{ skip.reason }} <br>
+                            <strong> Dept: </strong> {{ skip.dept }} <br>
                         </div>
                         <div class="buttons is-right">
                             <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
@@ -24,12 +24,12 @@
             <div v-else>
                 <div class="card-content">        
                     <div class="">
-                        Reason for Skip: {{ skip.reason }} <br>
-                        Schedule: {{ skip.schedule }} <br>
-                        Sequence: {{ skip.sequence }} <br>
-                        Item #: {{ skip.item }} <br>
-                        # of Unit Affected: {{ skip.units }} <br>
-                        Dept: {{ skip.dept }} <br>
+                        <strong> Schedule: </strong> {{ skip.schedule }} <br>
+                        <strong> Sequence: </strong> {{ skip.sequence }} <br>
+                        <strong> Item #: </strong> {{ skip.item }} <br>
+                        <strong> # of Units Affected: </strong> {{ skip.units }} <br>
+                        <strong> Reason for Skip: </strong> {{ skip.reason }} <br>
+                        <strong> Dept: </strong> {{ skip.dept }} <br>
                     </div>
                     <div class="buttons is-right">
                         <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
