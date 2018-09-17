@@ -11,7 +11,7 @@
                     <a @click="setCategory('All')">All</a>
                 </li>
                 <li v-for="category in categories" :key="category.title" :class="{ 'is-active' : activeCategory === category.title}">
-                    <a @click="setCategory(category.title)">{{ category.title }} &nbsp;&nbsp;<p class="badge is-badge- is-medium" data-badge="8"></p></a>
+                    <a @click="setCategory(category.title)">{{ category.title }} &nbsp;&nbsp;<span class="badge is-badge-danger is-medium" :data-badge="category.count"></span>&nbsp;&nbsp;&nbsp;</a>
                 </li>
             </ul>
         </div>

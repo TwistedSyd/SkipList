@@ -38,7 +38,7 @@
                                     <button @click="editSkip" class="button is-info">Edit Skip</button>
                                 </p>
                                 <p class="control">
-                                    <button @click="completeSkip" class="button is-success">Complete Skip</button>
+                                    <button @click="getCount" class="button is-success">Complete Skip</button>
                                 </p>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                             <div class="select">
                                 <select v-model="category">
                                     <option value="empty" selected="true" disabled>Choose Department</option>
-                                    <option v-for="category in categories" :value="category.id" :key="category.title">{{ category.title}}</option>
+                                    <option v-for="category in categories" :value="category.id" :key="category.title">{{category.title}}</option>
                                 </select> 
                             </div>
                         </div>
@@ -96,7 +96,7 @@
             <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
         </div>
     <!-- Edit skip form -->
-    <div class="modal" :class="{'is-active' : showSkipForm }">
+    <!-- <div class="modal" :class="{'is-active' : showSkipForm }">
             <div class="modal-background"></div>
             <div class="modal-content">
                 <form @submit.prevent="getTitle">
@@ -105,7 +105,7 @@
                             <div class="select">
                                 <select v-model="category">
                                     <option value="empty" selected="true" disabled>Choose Department</option>
-                                    <option v-for="category in categories" :value="category.id" :key="category.title">{{ category.title}}</option>
+                                    <option v-for="category in categories" :value="category.id" :key="category.title">{{category.title}}</option>
                                 </select> 
                             </div>
                         </div>
@@ -142,7 +142,7 @@
                 </form>
             </div>
             <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
-        </div>
+        </div> -->
         <router-view/>
     </div>
 </template>
@@ -196,13 +196,22 @@ export default {
     },
     methods: {
         getTitle() { 
-            /* Gets the catgeory title (department) of the skip to be added */ 
+            /* Gets the catgeory title (department) of the skip to be added */  
             db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
+                        const skipCount = documentSnapshot.data().count
                         const dept = documentSnapshot.data().title
-                        this.addSkip(dept)
+                        this.addSkip(dept, skipCount)
+
             })
         },
-        addSkip(dept) {
+        getCount() {
+            db.collection('categories').doc(this.selectedSkip.parent).get().then((documentSnapshot) => {
+                        const skipCount = documentSnapshot.data().count
+                        this.completeSkip(skipCount)
+
+            })
+        },
+        addSkip(dept, skipCount) {
             /* Adds skip to Firebase/Firestore */
             if(this.category !== 'empty') {
                 if(this.reason == 'Other'){
@@ -220,8 +229,10 @@ export default {
                     completed: false,
                 }
                 db.collection('categories').doc(this.category).collection('skips').add(skip)
+                db.collection('categories').doc(this.category).update({
+                     count: skipCount + 1
+                }) 
                 /* Make sure to erase form data after skip is added */
-
                 this.schedule = ''
                 this.sequence = ''
                 this.item = ''
@@ -241,13 +252,16 @@ export default {
             /* TODO: Edit skip data and update in Firebase/Firestore */
             console.log('Edit')
         },
-        completeSkip() {
+        completeSkip(skipCount) {
             /* Assigns skip as complete */
             if(this.selectedSkip != ''){
                 this.selectedSkip.completed = true
                 db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
                     completed: true
                 })
+                db.collection('categories').doc(this.selectedSkip.parent).update({
+                     count: skipCount - 1
+                }) 
                 this.selectedSkip = ''
                 this.$router.push('/')
             }else{
