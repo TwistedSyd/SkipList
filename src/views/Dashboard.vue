@@ -35,8 +35,6 @@
                 <div class="message-header">
                     <p>Skips from all departments:</p>
                 </div>
-                <div class="message-body">
-                </div>
             </article>
         </div>
         <!-- List of skips in the 'All' category
@@ -61,8 +59,6 @@
                 <div class="message-header">
                     <p>Completed Skips from this department:</p>
                 </div>
-                <div class="message-body">
-                </div>
             </article>
         </div>
         <!-- Header for 'All' category, ALL skips that ARE completed -->
@@ -70,8 +66,6 @@
             <article class="message is-success">
                 <div class="message-header">
                     <p>Completed Skips from all departments:</p>
-                </div>
-                <div class="message-body">
                 </div>
             </article>
         </div>

@@ -38,7 +38,7 @@
                                     <button @click="editSkip" class="button is-info">Edit Skip</button>
                                 </p>
                                 <p class="control">
-                                    <button @click="getCount" class="button is-success">Complete Skip</button>
+                                    <button @click="showComplete = !showComplete" class="button is-success">Complete Skip</button>
                                 </p>
                             </div>
                         </div>
@@ -143,6 +143,39 @@
             </div>
             <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
         </div> -->
+
+        <div class="modal" :class="{'is-active' : showComplete }">
+            <div class="modal-background"></div>
+                <div class="modal-content">
+                    <article class="message is-danger">
+                        <div v-if="this.selectedSkip != ''">
+                            <div class="message-header">
+                                Confirm the following skip is complete:
+                            </div>
+                            <div class="message-body">
+                                    <div class="field is-grouped">
+                                        <p class="control">
+                                            <button class="button is-success" @click="getCount" >Complete</button>
+                                        </p>
+                                        <p class="control">
+                                            <button class="button is-danger" @click="showComplete = !showComplete">Cancel</button>
+                                        </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div class="message-header">
+                                <strong>You need select a skip to complete it.</strong>
+                            </div>
+                            <div class="message-body has-text-centered">
+                                    <button class="button is-info" @click="showComplete = !showComplete" >Okay</button>
+                            </div>  
+                        </div>
+                    </article>
+                </div>
+            <button class="modal-close is-large" aria-label="close" @click="showComplete = !showComplete"></button>
+        </div>
+
         <router-view/>
     </div>
 </template>
@@ -158,6 +191,7 @@ export default {
         return {
             isAuthenticated: false,
             showSkipForm: false,
+            showComplete: false,
             categories: [],
             category: 'empty',
 
@@ -205,15 +239,11 @@ export default {
             })
         },
         getCount() { /* ROUTES TO COMPLETESKIP() */
-            if(this.selectedSkip != ''){
-                db.collection('categories').doc(this.selectedSkip.parent).get().then((documentSnapshot) => {
-                    const skipCount = documentSnapshot.data().count
-                    this.completeSkip(skipCount)
-
-                }) 
-            }else{
-                alert("You must select a skip to complete it!")
-            }
+            this.showComplete = false,
+            db.collection('categories').doc(this.selectedSkip.parent).get().then((documentSnapshot) => {
+                const skipCount = documentSnapshot.data().count
+                this.completeSkip(skipCount)
+            })
         },
         addSkip(dept, skipCount) {
             /* Adds skip to Firebase/Firestore */
@@ -255,13 +285,14 @@ export default {
         editSkip() {
             /* TODO: Edit skip data and update in Firebase/Firestore */
             if(this.selectedSkip != ''){
-                console.log('Edit' + this.selectedSkip)
+                console.log('Edit: ' + this.selectedSkip.id)
             }else{
                 alert("You must select a skip to edit it!")
             }
         },
         completeSkip(skipCount) {
             /* Assigns skip as complete */
+            console.log('Complete: ' + this.selectedSkip.id)
             this.selectedSkip.completed = true
             db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
                 completed: true

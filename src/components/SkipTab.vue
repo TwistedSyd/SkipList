@@ -94,7 +94,6 @@ export default {
             EventBus.$emit('Select', skip)
         },
         initAll() {
-            console.log('INIT ALL SKIP')
             /* Lists skips from all departments (categories) */
             if(this.$props.category === 'All') {
                 for (var i = 0; i < this.$props.categories.length; i++) {
