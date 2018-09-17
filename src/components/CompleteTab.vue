@@ -3,37 +3,24 @@
         <!-- Card component, each skip is listed in its own card, 
              all skip informatin is listed here -->
         <div class="card" v-for="skip in skips" :key="skip.id" v-if="skip.completed == true">
-            <div v-if="skip.id == selected">
-                <div id="select">
-                    <div class="card-content">        
-                        <div class="">
-                            <strong> Schedule: </strong> {{ skip.schedule }} <br>
-                            <strong> Sequence: </strong> {{ skip.sequence }} <br>
-                            <strong> Item #: </strong> {{ skip.item }} <br>
-                            <strong> # of Units Affected: </strong> {{ skip.units }} <br>
-                            <strong> Reason for Skip: </strong> {{ skip.reason }} <br>
-                            <strong> Dept: </strong> {{ skip.dept }} <br>
-                        </div>
+            <div class="card-content">        
+                <div class="columns">
+                    <div class="column">
+                        <strong> Schedule: </strong> {{ skip.schedule }} <br>
+                        <strong> Sequence: </strong> {{ skip.sequence }} 
+                    </div>
+                    <div class="column">
+                        <strong> Item #: </strong> {{ skip.item }} <br>
+                        <strong> # of Units Affected: </strong> {{ skip.units }} 
+                    </div>
+                    <div class="column">
+                        <strong> Reason for Skip: </strong> {{ skip.reason }} <br>
+                        <strong> Dept: </strong> {{ skip.dept }} 
+                    </div>
+                    <div class="column is-one-fifth">
                         <div class="buttons is-right">
                             <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
-                            <a @click="selectSkip(skip)" class="button is-info" >Select Skip</a>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div v-else>
-                <div class="card-content">        
-                    <div class="">
-                        <strong> Schedule: </strong> {{ skip.schedule }} <br>
-                        <strong> Sequence: </strong> {{ skip.sequence }} <br>
-                        <strong> Item #: </strong> {{ skip.item }} <br>
-                        <strong> # of Units Affected: </strong> {{ skip.units }} <br>
-                        <strong> Reason for Skip: </strong> {{ skip.reason }} <br>
-                        <strong> Dept: </strong> {{ skip.dept }} <br>
-                    </div>
-                    <div class="buttons is-right">
-                        <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
-                        <a @click="selectSkip(skip)" class="button is-info" >Select Skip</a>
                     </div>
                 </div>
             </div>
@@ -73,12 +60,6 @@ export default {
         }
     },
     methods: {
-        selectSkip(skip) {
-            /* Selects a skip to either edit, or complete */
-            this.selected = skip.id
-            console.log('Selected: ' + skip.id)
-            EventBus.$emit('Select', skip)
-        },
         deleteSkip(skip) {
             /* Removes skip from database, if selected from 'All' category
                make sure to remove properly */
