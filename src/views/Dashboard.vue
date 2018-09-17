@@ -21,7 +21,7 @@
                     <p>This department may be affected by Skips in the following departments:</p>
                 </div>
                 <div class="message-body">
-                    <li v-for="depts in dependants" :key="depts">
+                    <li v-for="depts in upline" :key="depts">
                         {{ depts }}
                     </li>
                 </div>
@@ -107,7 +107,7 @@ export default {
         return {
             activeCategory: 'All',
             categories: [],
-            dependants: ['Sex', 'Drugs', 'Rock n Roll']
+            upline: ['Sex', 'Drugs', 'Rock n Roll']
         }
     },
     firestore() {

@@ -242,6 +242,7 @@ export default {
                 db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
                     completed: true
                 })
+                this.selectedSkip = ''
                 this.$router.push('/')
             }else{
                 alert("You must select a skip to complete it!")
