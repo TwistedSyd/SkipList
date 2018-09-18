@@ -35,7 +35,7 @@
                                     </router-link>
                                 </p>
                                 <p class="control">
-                                    <button @click="editSkip" class="button is-info">Edit Skip</button>
+                                    <button @click="showEditForm = !showEditForm" class="button is-info">Edit Skip</button>
                                 </p>
                                 <p class="control">
                                     <button @click="showComplete = !showComplete" class="button is-success">Complete Skip</button>
@@ -51,7 +51,6 @@
         <div class="modal" :class="{'is-active' : showSkipForm }">
             <div class="modal-background"></div>
             <div class="modal-content">
-                <form @submit.prevent="getTitle">
                     <div class="field">
                         <div class="control">
                             <div class="select">
@@ -88,94 +87,124 @@
                     <div class="field">
                         <input type="number" class="input is-primary" v-model="units" placeholder="# of Units Affected">
                     </div>
-                    <div class="field">
-                        <button class="button is-success">Add</button>
+                    <div class="field is-grouped">
+                            <p class="control">
+                                <button class="button is-success" @click="getTitle">Add</button>
+                            </p>
+                            <p class="control">
+                                <button class="button is-danger" @click="closeAdd">Cancel</button>
+                            </p>
                     </div>
-                </form>
             </div>
-            <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
         </div>
-    <!-- Edit skip form -->
-    <!-- <div class="modal" :class="{'is-active' : showSkipForm }">
+        <!-- Edit skip form -->
+        <div class="modal" :class="{'is-active' : showEditForm }">
             <div class="modal-background"></div>
             <div class="modal-content">
-                <form @submit.prevent="getTitle">
-                    <div class="field">
-                        <div class="control">
-                            <div class="select">
-                                <select v-model="category">
-                                    <option value="empty" selected="true" disabled>Choose Department</option>
-                                    <option v-for="category in categories" :value="category.id" :key="category.title">{{category.title}}</option>
-                                </select> 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            <div class="select">
-                                <select v-model="reason">
-                                    <option value="" selected disabled>Reason for Skip</option>
-                                    <option v-for="reason in reasons" :value="reason" :key="reason">{{ reason }}</option>
-                                </select> 
-                            </div>
-                        </div>
-                    </div>
-                        <div class="field" v-if="reason == 'Other'">
-                            <input type="text" class="input is-info" v-model="otherReason" placeholder="Reason for Skip: Other">
-                        </div>
-
-                    <div class="field">
-                        <input type="text" class="input is-primary" v-model="schedule" placeholder="Schedule #">
-                    </div>
-                    <div class="field">
-                        <input type="text" class="input is-primary" v-model="sequence" placeholder="Sequence #">
-                    </div>
-                    <div class="field">
-                        <input type="text" class="input is-primary" v-model="item" placeholder="Item #">
-                    </div>
-                    <div class="field">
-                        <input type="number" class="input is-primary" v-model="units" placeholder="# of Units Affected">
-                    </div>
-                    <div class="field">
-                        <button class="button is-success">Add</button>
-                    </div>
-                </form>
-            </div>
-            <button class="modal-close is-large" aria-label="close" @click="showSkipForm = !showSkipForm"></button>
-        </div> -->
-
-        <div class="modal" :class="{'is-active' : showComplete }">
-            <div class="modal-background"></div>
-                <div class="modal-content">
-                    <article class="message is-danger">
-                        <div v-if="this.selectedSkip != ''">
-                            <div class="message-header">
-                                Confirm the following skip is complete:
-                            </div>
-                            <div class="message-body">
-                                    <div class="field is-grouped">
-                                        <p class="control">
-                                            <button class="button is-success" @click="getCount" >Complete</button>
-                                        </p>
-                                        <p class="control">
-                                            <button class="button is-danger" @click="showComplete = !showComplete">Cancel</button>
-                                        </p>
+                <div v-if="selectedSkip != ''">
+                        <div class="field">
+                            <div class="control">
+                                <div class="select">
+                                    <select>>
+                                        <option value="empty" selected>{{selectedSkip.dept}}</option>
+                                    </select> 
                                 </div>
                             </div>
                         </div>
-                        <div v-else>
+                        <!--
+                        <div class="field">
+                            <div class="control">
+                                <div class="select">
+                                    <select>
+                                        <option value="" selected disabled>Reason for Skip</option>
+                                        <option v-for="reason in reasons" :value="reason" :key="reason">{{ reason }}</option>
+                                    </select> 
+                                </div>
+                            </div>
+                        </div>
+                            <div class="field">
+                                <input type="text" class="input is-info" placeholder="Reason for Skip: Other">
+                            </div>
+                        -->
+                        <div class="field">
+                            <input type="text" class="input is-primary" v-model="editedSkip.schedule" :placeholder="selectedSkip.schedule">
+                        </div>
+                        <div class="field">
+                            <input type="text" class="input is-primary" v-model="editedSkip.sequence" :placeholder="selectedSkip.sequence">
+                        </div>
+                        <div class="field">
+                            <input type="text" class="input is-primary" v-model="editedSkip.item" :placeholder="selectedSkip.item">
+                        </div>
+                        <div class="field">
+                            <input type="number" class="input is-primary" v-model="editedSkip.units" :placeholder="selectedSkip.units">
+                        </div>
+                        <div class="field is-grouped">
+                            <p class="control">
+                                <button class="button is-success" @click="editSkip">Edit</button>
+                            </p>
+                            <p class="control">
+                                <button class="button is-danger" @click="closeEdit">Cancel</button>
+                            </p>
+                        </div>
+                </div>
+                <div v-else>
+                    <div class="message is-danger">
                             <div class="message-header">
-                                <strong>You need select a skip to complete it.</strong>
+                                <strong>You need select a skip to edit it.</strong>
                             </div>
                             <div class="message-body has-text-centered">
-                                    <button class="button is-info" @click="showComplete = !showComplete" >Okay</button>
+                                    <button class="button is-info" @click="showEditForm = !showEditForm" >Okay</button>
                             </div>  
-                        </div>
-                    </article>
+                    </div>
                 </div>
-            <button class="modal-close is-large" aria-label="close" @click="showComplete = !showComplete"></button>
+            </div>
+        </div> 
+        <!-- Complete skip form -->
+        <div class="modal" :class="{'is-active' : showComplete }">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <article class="message is-danger">
+                    <div v-if="this.selectedSkip != ''">
+                        <div class="message-header">
+                            Confirm the following skip is complete:
+                        </div>
+                        <div class="message-body">
+                            <div class="columns">
+                                <div class="column is-one-third">
+                                    <strong> Schedule: </strong> {{ selectedSkip.schedule }} <br>
+                                    <strong> Sequence: </strong> {{ selectedSkip.sequence }} 
+                                </div>
+                                <div class="column is-one-third">
+                                    <strong> Item #: </strong> {{ selectedSkip.item }} <br>
+                                    <strong> # of Units Affected: </strong> {{ selectedSkip.units }} 
+                                </div>
+                                <div class="column is-one-third">
+                                    <strong> Reason for Skip: </strong> {{ selectedSkip.reason }} <br>
+                                    <strong> Dept: </strong> {{ selectedSkip.dept }} 
+                                </div>
+                            </div>
+                            <div class="field is-grouped">
+                                    <p class="control">
+                                        <button class="button is-success" @click="getCount">Complete</button>
+                                    </p>
+                                    <p class="control">
+                                        <button class="button is-danger" @click="showComplete = !showComplete">Cancel</button>
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="message-header">
+                            <strong>You need select a skip to complete it.</strong>
+                        </div>
+                        <div class="message-body has-text-centered">
+                                <button class="button is-info" @click="showComplete = !showComplete" >Okay</button>
+                        </div>  
+                    </div>
+                </article>
+            </div>
         </div>
-
+        Edit: {{editedSkip}}
         <router-view/>
     </div>
 </template>
@@ -192,10 +221,12 @@ export default {
             isAuthenticated: false,
             showSkipForm: false,
             showComplete: false,
+            showEditForm: false,
             categories: [],
             category: 'empty',
 
-            selectedSkip: '',
+            editedSkip: {},
+            selectedSkip: {},
             parent: '',
             schedule: '',
             sequence: '',
@@ -222,7 +253,8 @@ export default {
     mounted() {
         /* Catches or sends data via the Event Bus */
         EventBus.$on('Select', data => {
-            this.selectedSkip = data
+            this.selectedSkip = Object.assign({}, data)
+            this.editedSkip = Object.assign({}, data)
         })   
         EventBus.$on('selectNone', () => {
             this.selectedSkip = ''
@@ -230,13 +262,17 @@ export default {
     },
     methods: {
         getTitle() { /* ROUTES TO ADDSKIP() */
-            /* Gets the catgeory title (department) of the skip to be added */  
-            db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
-                        const skipCount = documentSnapshot.data().count
-                        const dept = documentSnapshot.data().title
-                        this.addSkip(dept, skipCount)
+            /* Gets the catgeory title (department) of the skip to be added */ 
+            if(this.category !== 'empty') {
+                db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
+                            const skipCount = documentSnapshot.data().count
+                            const dept = documentSnapshot.data().title
+                            this.addSkip(dept, skipCount)
 
-            })
+                })
+            }else {
+                alert('You must fill out all fields!')
+            }
         },
         getCount() { /* ROUTES TO COMPLETESKIP() */
             this.showComplete = false,
@@ -247,48 +283,54 @@ export default {
         },
         addSkip(dept, skipCount) {
             /* Adds skip to Firebase/Firestore */
-            if(this.category !== 'empty') {
-                if(this.reason == 'Other'){
-                    this.reason = 'Other: ' + this.otherReason
-                }
-                const skip = {
-
-                    parent: this.category,
-                    schedule: this.schedule,
-                    sequence: this.sequence,
-                    item: this.item,
-                    units: this.units,
-                    dept: dept,
-                    reason: this.reason,
-                    completed: false,
-                }
-                db.collection('categories').doc(this.category).collection('skips').add(skip)
-                db.collection('categories').doc(this.category).update({
-                     count: skipCount + 1
-                }) 
-                /* Make sure to erase form data after skip is added */
-                this.schedule = ''
-                this.sequence = ''
-                this.item = ''
-                this.units = null
-                this.reason = ''
-                dept = ''
-
-                this.category = 'empty'
-                this.showSkipForm = false
-                this.$router.push('/')
-            }else{
-                alert('You must fill out all fields!')
+            if(this.reason == 'Other'){
+                this.reason = 'Other: ' + this.otherReason
             }
-    
+            const skip = {
+
+                parent: this.category,
+                schedule: this.schedule,
+                sequence: this.sequence,
+                item: this.item,
+                units: this.units,
+                dept: dept,
+                reason: this.reason,
+                completed: false,
+            }
+            db.collection('categories').doc(this.category).collection('skips').add(skip)
+            db.collection('categories').doc(this.category).update({
+                    count: skipCount + 1
+            }) 
+            /* Make sure to erase form data after skip is added */
+            this.schedule = ''
+            this.sequence = ''
+            this.item = ''
+            this.units = null
+            this.reason = ''
+            dept = ''
+
+            this.category = 'empty'
+            this.showSkipForm = false
+            this.$router.push('/')
+        },
+        closeAdd() {
+            /* Close add skip form and erase data */
+            this.showSkipForm = false
+            this.schedule = ''
+            this.sequence = ''
+            this.item = ''
+            this.units = null
+            this.reason = ''
+            this.category = 'empty'
         },
         editSkip() {
             /* TODO: Edit skip data and update in Firebase/Firestore */
-            if(this.selectedSkip != ''){
-                console.log('Edit: ' + this.selectedSkip.id)
-            }else{
-                alert("You must select a skip to edit it!")
-            }
+            this.showEditForm = false
+            console.log("Edit: " + this.editedSkip)
+        },
+        closeEdit() {
+            this.showEditForm = false
+            this.editedSkip = Object.assign({}, this.selectedSkip)
         },
         completeSkip(skipCount) {
             /* Assigns skip as complete */
