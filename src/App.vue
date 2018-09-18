@@ -326,7 +326,16 @@ export default {
         editSkip() {
             /* TODO: Edit skip data and update in Firebase/Firestore */
             this.showEditForm = false
-            console.log("Edit: " + this.editedSkip)
+            console.log("Edit: " + this.editedSkip.id)
+            db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
+                schedule: this.editedSkip.schedule,
+                sequence: this.editedSkip.sequence,
+                item: this.editedSkip.item,
+                units: this.editedSkip.units
+            })
+            this.editedSkip = {}
+            this.selectedSkip = {}
+            this.$router.push('/')
         },
         closeEdit() {
             this.showEditForm = false
@@ -342,7 +351,7 @@ export default {
             db.collection('categories').doc(this.selectedSkip.parent).update({
                     count: skipCount - 1
             }) 
-            this.selectedSkip = ''
+            this.selectedSkip = {}
             this.$router.push('/')
         },
         logOut() {
