@@ -111,21 +111,51 @@
                                 </div>
                             </div>
                         </div>
-                        <!--
                         <div class="field">
-                            <div class="control">
-                                <div class="select">
-                                    <select>
-                                        <option value="" selected disabled>Reason for Skip</option>
-                                        <option v-for="reason in reasons" :value="reason" :key="reason">{{ reason }}</option>
-                                    </select> 
+                        <div class="control">
+                        <div v-if="selectedSkip.reason == 'Material Shortage' || selectedSkip.reason == 'Damaged Material' || selectedSkip.reason == 'Powder Coat'">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select">
+                                        <select v-model="editedSkip.reason">
+                                            <option value="" selected disabled>{{selectedSkip.reason}}</option>
+                                            <option v-for="reason in reasons" :key="reason">{{reason}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="editedSkip.reason == 'Other'">
+                                <div class="field">
+                                    <div class="control">
+                                        <input type="text" class="input is-info" v-model="otherReason" placeholder="Reason for Skip: Other">
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div v-else>
                             <div class="field">
-                                <input type="text" class="input is-info" placeholder="Reason for Skip: Other">
+                                <div class="control">
+                                    <div class="select">
+                                        <select v-model="editedSkip.reason">
+                                            <option value="" selected disabled>Other</option>
+                                            <option v-for="reason in reasons" :key="reason">{{reason}}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        -->
+                            <div v-if="editedSkip.reason == 'Other'">
+                                <div class="field">
+                                    <div class="control">
+                                        <input type="text" class="input is-info" v-model="otherReason" :placeholder="selectedSkip.reason">
+                                    </div>
+                                </div>
+                            </div>   
+                        </div>
+                        </div>
+                        </div>
+
+
+                                             
                         <div class="field">
                             <input type="text" class="input is-primary" v-model="editedSkip.schedule" :placeholder="selectedSkip.schedule">
                         </div>
@@ -204,6 +234,7 @@
                 </article>
             </div>
         </div>
+        otherReason: {{otherReason}} <br>
         Edit: {{editedSkip}}
         <router-view/>
     </div>
@@ -255,6 +286,12 @@ export default {
         EventBus.$on('Select', data => {
             this.selectedSkip = Object.assign({}, data)
             this.editedSkip = Object.assign({}, data)
+            if(this.editedSkip.reason == 'Material Shortage'||this.editedSkip.reason == 'Damaged Material'||this.editedSkip.reason == 'Powder Coat'){
+                this.otherReason = ''
+            }else{
+                this.otherReason = this.editedSkip.reason
+                this.editedSkip.reason = 'Other'
+            }
         })   
         EventBus.$on('selectNone', () => {
             this.selectedSkip = ''
@@ -284,7 +321,7 @@ export default {
         addSkip(dept, skipCount) {
             /* Adds skip to Firebase/Firestore */
             if(this.reason == 'Other'){
-                this.reason = 'Other: ' + this.otherReason
+                this.reason = this.otherReason
             }
             const skip = {
 
@@ -327,14 +364,20 @@ export default {
             /* TODO: Edit skip data and update in Firebase/Firestore */
             this.showEditForm = false
             console.log("Edit: " + this.editedSkip.id)
+            console.log("Reason: " + this.editedSkip.reason)
+            if(this.otherReason != '' && this.editedSkip.reason == 'Other'){
+                this.editedSkip.reason = this.otherReason
+            }
             db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
                 schedule: this.editedSkip.schedule,
                 sequence: this.editedSkip.sequence,
                 item: this.editedSkip.item,
-                units: this.editedSkip.units
+                units: this.editedSkip.units,
+                reason: this.editedSkip.reason
             })
             this.editedSkip = {}
             this.selectedSkip = {}
+            this.otherReason = ''
             this.$router.push('/')
         },
         closeEdit() {
