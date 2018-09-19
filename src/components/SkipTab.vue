@@ -41,7 +41,7 @@
                         </div>
                         <div class="column">
                             <strong> Reason for Skip: </strong> {{ skip.reason }} <br>
-                            <strong> Dept: </strong> {{ skip.dept }} 
+                            <strong> Dept: </strong> {{ skip.dept }}
                         </div>
                         <div class="column is-one-fifth">
                             <div class="buttons is-right">
@@ -80,6 +80,9 @@ export default {
         EventBus.$on('Select', data => {
             this.selected = data.id
         })
+        EventBus.$on('selectNone', data => {
+            this.selected = ''
+        })
     },
     firestore() {
         return {
@@ -90,7 +93,6 @@ export default {
         selectSkip(skip) {
             /* Selects a skip to either edit, or complete */
             this.selected = skip.id
-            console.log('Selected: ' + skip.id)
             EventBus.$emit('Select', skip)
         },
         initAll() {

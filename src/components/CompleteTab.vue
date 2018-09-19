@@ -41,7 +41,6 @@ export default {
     data() {
         return {
             skips: [],
-            selected: ''
         }
     },
     mounted() {
@@ -49,10 +48,7 @@ export default {
             if(this.$props.category == 'All'){
                 this.initAll()
             }
-        }, 2000)
-        EventBus.$on('Select', data => {
-            this.selected = data.id
-        })   
+        }, 2000)   
     },
     firestore() {
         return {

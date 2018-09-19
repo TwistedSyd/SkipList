@@ -235,7 +235,8 @@
             </div>
         </div>
         otherReason: {{otherReason}} <br>
-        Edit: {{editedSkip}}
+        Edit: {{editedSkip}} <br>
+        Selected: {{selectedSkip}}
         <router-view/>
     </div>
 </template>
@@ -256,8 +257,8 @@ export default {
             categories: [],
             category: 'empty',
 
-            editedSkip: {},
-            selectedSkip: {},
+            editedSkip: '',
+            selectedSkip: '',
             parent: '',
             schedule: '',
             sequence: '',
@@ -286,37 +287,40 @@ export default {
         EventBus.$on('Select', data => {
             this.selectedSkip = Object.assign({}, data)
             this.editedSkip = Object.assign({}, data)
+            this.selectedSkip.id = data.id
+
             if(this.editedSkip.reason == 'Material Shortage'||this.editedSkip.reason == 'Damaged Material'||this.editedSkip.reason == 'Powder Coat'){
                 this.otherReason = ''
             }else{
                 this.otherReason = this.editedSkip.reason
                 this.editedSkip.reason = 'Other'
             }
+
+            console.log("Selected: " + this.selectedSkip.id)
         })   
         EventBus.$on('selectNone', () => {
             this.selectedSkip = ''
+            this.editedSkip = ''
+            this.otherReason = ''
         })
     },
     methods: {
         getTitle() { /* ROUTES TO ADDSKIP() */
             /* Gets the catgeory title (department) of the skip to be added */ 
-            if(this.category !== 'empty') {
-                db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
-                            const skipCount = documentSnapshot.data().count
-                            const dept = documentSnapshot.data().title
-                            this.addSkip(dept, skipCount)
+            if(this.category !== 'empty'&&this.reason!==''&&this.schedule!==''&&this.sequence!==''&&this.item!==''&&this.units!==null) {
+                if(this.reason == 'Other' && this.otherReason != ''){
+                    db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
+                                const skipCount = documentSnapshot.data().count
+                                const dept = documentSnapshot.data().title
+                                this.addSkip(dept, skipCount)
 
-                })
+                    })
+                }else{
+                    alert('You must fill out all fields!')
+                }
             }else {
                 alert('You must fill out all fields!')
             }
-        },
-        getCount() { /* ROUTES TO COMPLETESKIP() */
-            this.showComplete = false,
-            db.collection('categories').doc(this.selectedSkip.parent).get().then((documentSnapshot) => {
-                const skipCount = documentSnapshot.data().count
-                this.completeSkip(skipCount)
-            })
         },
         addSkip(dept, skipCount) {
             /* Adds skip to Firebase/Firestore */
@@ -344,6 +348,7 @@ export default {
             this.item = ''
             this.units = null
             this.reason = ''
+            this.otherReason = ''
             dept = ''
 
             this.category = 'empty'
@@ -358,13 +363,12 @@ export default {
             this.item = ''
             this.units = null
             this.reason = ''
+            this.otherReason = ''
             this.category = 'empty'
         },
         editSkip() {
             /* TODO: Edit skip data and update in Firebase/Firestore */
             this.showEditForm = false
-            console.log("Edit: " + this.editedSkip.id)
-            console.log("Reason: " + this.editedSkip.reason)
             if(this.otherReason != '' && this.editedSkip.reason == 'Other'){
                 this.editedSkip.reason = this.otherReason
             }
@@ -375,18 +379,28 @@ export default {
                 units: this.editedSkip.units,
                 reason: this.editedSkip.reason
             })
-            this.editedSkip = {}
-            this.selectedSkip = {}
+            console.log("Edited: " + this.selectedSkip.id)
+            this.editedSkip = ''
+            this.selectedSkip = ''
             this.otherReason = ''
             this.$router.push('/')
         },
         closeEdit() {
             this.showEditForm = false
+            this.selectedSkip = ''
+            this.otherReason = ''
             this.editedSkip = Object.assign({}, this.selectedSkip)
+            this.$router.push('/')
+        },
+        getCount() { /* ROUTES TO COMPLETESKIP() */
+            this.showComplete = false,
+            db.collection('categories').doc(this.selectedSkip.parent).get().then((documentSnapshot) => {
+                const skipCount = documentSnapshot.data().count
+                this.completeSkip(skipCount)
+            })
         },
         completeSkip(skipCount) {
             /* Assigns skip as complete */
-            console.log('Complete: ' + this.selectedSkip.id)
             this.selectedSkip.completed = true
             db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
                 completed: true
@@ -394,7 +408,9 @@ export default {
             db.collection('categories').doc(this.selectedSkip.parent).update({
                     count: skipCount - 1
             }) 
-            this.selectedSkip = {}
+            console.log('Complete: ' + this.selectedSkip.id)
+            this.selectedSkip = ''
+            this.editedSkip = ''
             this.$router.push('/')
         },
         logOut() {
