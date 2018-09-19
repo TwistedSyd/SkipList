@@ -234,9 +234,6 @@
                 </article>
             </div>
         </div>
-        otherReason: {{otherReason}} <br>
-        Edit: {{editedSkip}} <br>
-        Selected: {{selectedSkip}}
         <router-view/>
     </div>
 </template>

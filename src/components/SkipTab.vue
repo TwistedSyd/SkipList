@@ -86,7 +86,7 @@ export default {
     },
     firestore() {
         return {
-            skips: db.collection('categories').doc(this.$props.category).collection('skips').orderBy('schedule')
+            skips: db.collection('categories').doc(this.$props.category).collection('skips')
         }
     },
     methods: {
