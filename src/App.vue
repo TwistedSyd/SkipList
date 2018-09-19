@@ -307,16 +307,16 @@ export default {
     methods: {
         getTitle() { /* ROUTES TO ADDSKIP() */
             /* Gets the catgeory title (department) of the skip to be added */ 
-            if(this.category !== 'empty'&&this.reason!==''&&this.schedule!==''&&this.sequence!==''&&this.item!==''&&this.units!==null) {
-                if(this.reason == 'Other' && this.otherReason != ''){
+            if(this.category!=='empty'&&this.reason!==''&&this.schedule!==''&&this.sequence!==''&&this.item!==''&&this.units!==null) {
+                if(this.reason == 'Other' && this.otherReason == ''){
+                    alert('You must fill out all fields!')
+                }else{
                     db.collection('categories').doc(this.category).get().then((documentSnapshot) => {
                                 const skipCount = documentSnapshot.data().count
                                 const dept = documentSnapshot.data().title
                                 this.addSkip(dept, skipCount)
 
                     })
-                }else{
-                    alert('You must fill out all fields!')
                 }
             }else {
                 alert('You must fill out all fields!')
@@ -388,9 +388,10 @@ export default {
         closeEdit() {
             this.showEditForm = false
             this.selectedSkip = ''
+            this.editedSkip = ''
             this.otherReason = ''
-            this.editedSkip = Object.assign({}, this.selectedSkip)
-            this.$router.push('/')
+            EventBus.$emit('selectNone')
+           
         },
         getCount() { /* ROUTES TO COMPLETESKIP() */
             this.showComplete = false,
