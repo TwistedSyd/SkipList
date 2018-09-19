@@ -170,7 +170,7 @@
                         </div>
                         <div class="field is-grouped">
                             <p class="control">
-                                <button class="button is-success" @click="editSkip">Edit</button>
+                                <button class="button is-success" @click="checkEdit">Edit</button>
                             </p>
                             <p class="control">
                                 <button class="button is-danger" @click="closeEdit">Cancel</button>
@@ -366,9 +366,19 @@ export default {
             this.otherReason = ''
             this.category = 'empty'
         },
+        checkEdit() { /* ROUTES TO EDITSKIP */
+            if(this.editedSkip.reason!==''&&this.editedSkip.schedule!==''&&this.editedSkip.sequence!==''&&this.editedSkip.item!==''&&this.editedSkip.units!==null) {
+                if(this.editedSkip.reason == 'Other' && this.otherReason == ''){
+                    alert('You must fill out all fields!')
+                }else{
+                    this.editSkip()
+                }
+            }else {
+                alert('You must fill out all fields!')
+            }
+        },
         editSkip() {
             /* TODO: Edit skip data and update in Firebase/Firestore */
-            this.showEditForm = false
             if(this.otherReason != '' && this.editedSkip.reason == 'Other'){
                 this.editedSkip.reason = this.otherReason
             }
@@ -380,9 +390,11 @@ export default {
                 reason: this.editedSkip.reason
             })
             console.log("Edited: " + this.selectedSkip.id)
+            this.showEditForm = false
             this.editedSkip = ''
             this.selectedSkip = ''
             this.otherReason = ''
+            EventBus.$emit('selectNone')
             this.$router.push('/')
         },
         closeEdit() {
