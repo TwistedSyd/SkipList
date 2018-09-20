@@ -52,7 +52,7 @@ export default {
     },
     firestore() {
         return {
-            skips: db.collection('categories').doc(this.$props.category).collection('skips').orderBy('schedule')
+            skips: db.collection('categories').doc(this.$props.category).collection('skips')
         }
     },
     methods: {
@@ -74,12 +74,21 @@ export default {
                 db.collection('categories').doc(this.$props.category).collection('skips').doc(skip.id).delete()
             }
         },
+        compare(a,b,) {
+            if(a.schedule < b.schedule) {
+                return -1
+            }
+            if(a.schedule > b.schedule) {
+                return 1
+            }
+            return 0
+        },
         initAll() {
             /* Lists skips from all departments (categories) */
             if(this.$props.category === 'All') {
                 for (var i = 0; i < this.$props.categories.length; i++) {
                     const categoryID = this.$props.categories[i].id
-                    db.collection('categories').doc(categoryID).collection('skips').orderBy('schedule').get()
+                    db.collection('categories').doc(categoryID).collection('skips').get()
                         .then((querySnapshot) => {
                             querySnapshot.forEach((collection) => {
                                 this.skips.push({
@@ -95,6 +104,7 @@ export default {
                                     category: categoryID
                                 })
                             })
+                            this.skips.sort(this.compare)
                         })
                 }
             }

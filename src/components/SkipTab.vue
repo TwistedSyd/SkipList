@@ -95,12 +95,21 @@ export default {
             this.selected = skip.id
             EventBus.$emit('Select', skip)
         },
+        compare(a,b,) {
+            if(a.schedule < b.schedule) {
+                return -1
+            }
+            if(a.schedule > b.schedule) {
+                return 1
+            }
+            return 0
+        },
         initAll() {
             /* Lists skips from all departments (categories) */
             if(this.$props.category === 'All') {
                 for (var i = 0; i < this.$props.categories.length; i++) {
                     const categoryID = this.$props.categories[i].id
-                    db.collection('categories').doc(categoryID).collection('skips').orderBy('schedule').get()
+                    db.collection('categories').doc(categoryID).collection('skips').get()
                         .then((querySnapshot) => {
                             querySnapshot.forEach((collection) => {
                                 this.skips.push({
@@ -116,6 +125,7 @@ export default {
                                     category: categoryID
                                 })
                             })
+                            this.skips.sort(this.compare)
                         })
                 }
             }
