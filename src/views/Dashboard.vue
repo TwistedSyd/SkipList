@@ -1,10 +1,6 @@
 <template>
     <div>
         <!-- Dashboard view, selectedable departments listed here -->
-        <!-- <div v-if="activeCategory == ''">
-            Please select a department or 'All' below to view skips.
-        </div> -->
-        <div id="test">
         <div class="tabs is-toggle">
             <ul>
                 <li :class="{ 'is-active' : activeCategory === 'All'}">
@@ -14,7 +10,6 @@
                     <a @click="setCategory(category.title)">{{ category.title }} &nbsp;&nbsp;<span class="badge is-badge-danger is-medium" :data-badge="category.count"></span>&nbsp;&nbsp;&nbsp;</a>
                 </li>
             </ul>
-        </div>
         </div>
         <!-- Header for skips that may affect up/downline departments -->
         <div class="Message" v-if="activeCategory != 'All'">
@@ -36,6 +31,13 @@
                     <p>Skips from all departments:</p>
                 </div>
             </article>
+        </div>
+        <div class="container" id="flower" v-if="showLoader == true && activeCategory == 'All'">
+            <flower-spinner
+                :animation-duration="3000"
+                :size="150"
+                :color="'#209CEE'"
+            />
         </div>
         <!-- List of skips in the 'All' category
              pulled from the SkipTab component -->
@@ -92,19 +94,27 @@ import { db } from '../main'
 import SkipTab from '../components/SkipTab.vue'
 import CompleteTab from '../components/CompleteTab.vue'
 import EventBus from '../event-bus'
+import {FlowerSpinner} from 'epic-spinners'
 
 export default {
     name: 'dashboard',
     components: {
         SkipTab,
-        CompleteTab
+        CompleteTab,
+        FlowerSpinner
     },
     data() {
         return {
             activeCategory: 'All',
             categories: [],
-            upline: ['Sex', 'Drugs', 'Rock n Roll']
+            upline: ['Sex', 'Drugs', 'Rock n Roll'],
+            showLoader: true
         }
+    },
+    mounted() {
+        setTimeout(() => {
+            this.showLoader = false
+        }, 3000)
     },
     firestore() {
         return {
@@ -117,6 +127,12 @@ export default {
                dashboard view */
             this.activeCategory = title
             EventBus.$emit('selectNone')
+            if(this.activeCategory == 'All'){
+                this.showLoader = true
+                setTimeout(() => {
+                    this.showLoader = false
+                }, 3000)
+            }
         }
     },
 }
