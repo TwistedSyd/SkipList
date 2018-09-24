@@ -60,7 +60,7 @@ import { db } from "../main"
 import EventBus from '../event-bus'
 
 export default {
-    name: 'SkipTab',
+    name: 'skiptab',
     props: {
         category: String,
         categories: Array
@@ -76,7 +76,7 @@ export default {
             if(this.$props.category == 'All'){
                 this.initAll()
             }
-        }, 2000)
+        }, 2000) 
         EventBus.$on('Select', data => {
             this.selected = data.id
         })

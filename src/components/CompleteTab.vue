@@ -33,7 +33,7 @@ import { db } from "../main"
 import EventBus from '../event-bus'
 
 export default {
-    name: 'SkipTab',
+    name: 'completetab',
     props: {
         category: String,
         categories: Array
