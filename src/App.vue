@@ -112,49 +112,47 @@
                             </div>
                         </div>
                         <div class="field">
-                        <div class="control">
-                        <div v-if="selectedSkip.reason == 'Material Shortage' || selectedSkip.reason == 'Damaged Material' || selectedSkip.reason == 'Powder Coat'">
-                            <div class="field">
-                                <div class="control">
-                                    <div class="select">
-                                        <select v-model="editedSkip.reason">
-                                            <option value="" selected disabled>{{selectedSkip.reason}}</option>
-                                            <option v-for="reason in reasons" :key="reason">{{reason}}</option>
-                                        </select>
+                            <div class="control">
+                                <div v-if="selectedSkip.reason == 'Material Shortage' || selectedSkip.reason == 'Damaged Material' || selectedSkip.reason == 'Powder Coat'">
+                                    <div class="field">
+                                        <div class="control">
+                                            <div class="select">
+                                                <select v-model="editedSkip.reason">
+                                                    <option value="" selected disabled>{{selectedSkip.reason}}</option>
+                                                    <option v-for="reason in reasons" :key="reason">{{reason}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div v-if="editedSkip.reason == 'Other'">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input type="text" class="input is-info" v-model="otherReason" placeholder="Reason for Skip: Other">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div class="field">
+                                        <div class="control">
+                                            <div class="select">
+                                                <select v-model="editedSkip.reason">
+                                                    <option value="" selected disabled>Other</option>
+                                                    <option v-for="reason in reasons" :key="reason">{{reason}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="editedSkip.reason == 'Other'">
+                                        <div class="field">
+                                            <div class="control">
+                                                <input type="text" class="input is-info" v-model="otherReason" :placeholder="selectedSkip.reason">
+                                            </div>
+                                        </div>
+                                    </div>   
                                 </div>
                             </div>
-                            <div v-if="editedSkip.reason == 'Other'">
-                                <div class="field">
-                                    <div class="control">
-                                        <input type="text" class="input is-info" v-model="otherReason" placeholder="Reason for Skip: Other">
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                        <div v-else>
-                            <div class="field">
-                                <div class="control">
-                                    <div class="select">
-                                        <select v-model="editedSkip.reason">
-                                            <option value="" selected disabled>Other</option>
-                                            <option v-for="reason in reasons" :key="reason">{{reason}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-if="editedSkip.reason == 'Other'">
-                                <div class="field">
-                                    <div class="control">
-                                        <input type="text" class="input is-info" v-model="otherReason" :placeholder="selectedSkip.reason">
-                                    </div>
-                                </div>
-                            </div>   
-                        </div>
-                        </div>
-                        </div>
-
-
                                              
                         <div class="field">
                             <input type="text" class="input is-primary" v-model="editedSkip.schedule" :placeholder="selectedSkip.schedule">
