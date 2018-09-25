@@ -7,19 +7,19 @@
                     <a @click="setCategory('All')">All</a>
                 </li>
                 <li v-for="category in categories" :key="category.title" :class="{ 'is-active' : activeCategory === category.title}">
-                    <a @click="setCategory(category.title)">{{ category.title }} &nbsp;&nbsp;<span class="badge is-badge-danger is-medium" :data-badge="category.count"></span>&nbsp;&nbsp;&nbsp;</a>
+                    <a @click="setCategory(category.title, category.id)">{{ category.title }} &nbsp;&nbsp;<span class="badge is-badge-danger is-medium" :data-badge="category.count"></span>&nbsp;&nbsp;&nbsp;</a>
                 </li>
             </ul>
         </div>
         <!-- Header for skips that may affect up/downline departments -->
-        <div class="Message" v-if="activeCategory != 'All'">
+        <div class="Message" v-if="activeCategory != 'All' && activeCategory != ''">
             <article class="message is-danger">
                 <div class="message-header">
                     <p>This department may be affected by Skips in the following departments:</p>
                 </div>
                 <div class="message-body">
                     <li v-for="depts in upline" :key="depts">
-                        {{ depts }}
+                        {{ depts }} 
                     </li>
                 </div>
             </article>
@@ -105,16 +105,19 @@ export default {
     },
     data() {
         return {
-            activeCategory: 'All',
+            activeCategory: '',
+            activeID: '',
             categories: [],
-            upline: ['Sex', 'Drugs', 'Rock n Roll'],
-            showLoader: true
+            upline: [],
+            showLoader: true,
+            refreshed: true,
         }
     },
-    mounted() {
-        setTimeout(() => {
-            this.showLoader = false
-        }, 3000)
+    updated() {
+        if(this.refreshed){
+            this.refreshed = false
+            this.setCategory('All')
+        }
     },
     firestore() {
         return {
@@ -122,10 +125,12 @@ export default {
         }
     },
     methods: {
-        setCategory(title) {
+        setCategory(title, id) {
             /* Set the current department that is selected in the 
                dashboard view */
             this.activeCategory = title
+            this.activeID = id
+            console.log(this.activeID)
             EventBus.$emit('selectNone')
             if(this.activeCategory == 'All'){
                 this.showLoader = true

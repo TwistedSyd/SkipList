@@ -72,11 +72,7 @@ export default {
         }
     },
     mounted() {
-        setTimeout(() => {
-            if(this.$props.category == 'All'){
-                this.initAll()
-            }
-        }, 2000) 
+        this.initAll()
         EventBus.$on('Select', data => {
             this.selected = data.id
         })
