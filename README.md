@@ -1,8 +1,8 @@
 # SkipList 
 A web-based app using Vue.js, CSS Bulma, and Firebase Firestore. 
-The app is meant for keep track of 'Skips' in the production line, 
-skips may be added, edited, and completed. The purpose of this is to keep track 
-of what departments (up and down-line) are affected by the aformentioned skips. 
+This app is meant to keep track of 'Skips' in the production line, 
+skips may be added, edited, and completed. This app allows department users to 
+see what skips will affect their department (from up and down-line areas).
 
 ## Project setup
 ```
