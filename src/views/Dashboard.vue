@@ -1,7 +1,6 @@
 <template>
     <div>
         <!-- Dashboard view, selectedable departments listed here -->
-        Upline: {{upline}}
         <div class="tabs is-toggle">
             <ul>
                 <li :class="{ 'is-active' : activeCategory === 'All'}">
@@ -35,7 +34,7 @@
         </div>
         <div class="container" id="flower" v-if="showLoader == true && activeCategory == 'All'">
             <flower-spinner
-                :animation-duration="3000"
+                :animation-duration="2000"
                 :size="150"
                 :color="'#209CEE'"
             />
@@ -137,7 +136,7 @@ export default {
                 this.showLoader = true
                 setTimeout(() => {
                     this.showLoader = false
-                }, 3000)
+                }, 2000)
             }
         }
     },

@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <!-- Header for whole page -->
-        <section class="hero is-info is-bold">
+        <section class="hero is-info">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
@@ -332,6 +332,7 @@ export default {
                 dept: dept,
                 reason: this.reason,
                 completed: false,
+                added: firebase.firestore.FieldValue.serverTimestamp()
             }
             db.collection('categories').doc(this.category).collection('skips').add(skip)
             db.collection('categories').doc(this.category).update({
