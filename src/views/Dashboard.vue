@@ -1,13 +1,14 @@
 <template>
     <div>
         <!-- Dashboard view, selectedable departments listed here -->
+        Upline: {{upline}}
         <div class="tabs is-toggle">
             <ul>
                 <li :class="{ 'is-active' : activeCategory === 'All'}">
                     <a @click="setCategory('All')">All</a>
                 </li>
                 <li v-for="category in categories" :key="category.title" :class="{ 'is-active' : activeCategory === category.title}">
-                    <a @click="setCategory(category.title, category.id)">{{ category.title }} &nbsp;&nbsp;<span class="badge is-badge-danger is-medium" :data-badge="category.count"></span>&nbsp;&nbsp;&nbsp;</a>
+                    <a @click="setCategory(category.title, category.id, category.upline, category.count)">{{ category.title }} &nbsp;&nbsp;<span class="badge is-badge-danger is-medium" :data-badge="category.count"></span>&nbsp;&nbsp;&nbsp;</a>
                 </li>
             </ul>
         </div>
@@ -18,8 +19,8 @@
                     <p>This department may be affected by Skips in the following departments:</p>
                 </div>
                 <div class="message-body">
-                    <li v-for="depts in upline" :key="depts">
-                        {{ depts }} 
+                    <li v-for="depts in upline" :key="depts.id" v-if="depts.count > 0">
+                        {{ depts.title}} ({{depts.count}}) 
                     </li>
                 </div>
             </article>
@@ -125,12 +126,12 @@ export default {
         }
     },
     methods: {
-        setCategory(title, id) {
+        setCategory(title, id, upline, count) {
             /* Set the current department that is selected in the 
                dashboard view */
             this.activeCategory = title
             this.activeID = id
-            console.log(this.activeID)
+            this.upline = upline
             EventBus.$emit('selectNone')
             if(this.activeCategory == 'All'){
                 this.showLoader = true
