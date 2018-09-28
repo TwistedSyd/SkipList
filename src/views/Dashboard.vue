@@ -15,7 +15,7 @@
         <div class="Message" v-if="activeCategory != 'All' && activeCategory != ''">
             <article class="message is-danger">
                 <div class="message-header">
-                    <p>This department may be affected by Skips in the following departments:</p>
+                    <p>{{activeCategory}} may be affected by Skips in the following departments:</p>
                 </div>
                 <div class="message-body">
                     <li v-for="depts in upline" :key="depts.id" v-if="depts.count > 0">
@@ -59,7 +59,7 @@
         <div class="Message" v-if="activeCategory != 'All'">
             <article class="message is-success">
                 <div class="message-header">
-                    <p>Completed Skips from this department:</p>
+                    <p>Completed Skips from {{activeCategory}}:</p>
                 </div>
             </article>
         </div>
