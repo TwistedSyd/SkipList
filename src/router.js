@@ -9,7 +9,6 @@ Vue.use(Router)
 
 /* Set view names, paths, etc */
 export default new Router({
-    mode: 'history',
     base: process.env.BASE_URL,
     routes: [
     {
@@ -21,6 +20,10 @@ export default new Router({
         path: "/dashboard",
         name: 'dashboard',
         component: Dashboard
+    },
+    {
+        path: '*',
+        redirect: "/"
     }
   ]
 })
