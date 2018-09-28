@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 import { db } from '../main'
 import SkipTab from '../components/SkipTab.vue'
 import CompleteTab from '../components/CompleteTab.vue'
@@ -112,6 +113,13 @@ export default {
             showLoader: true,
             refreshed: true,
         }
+    },
+    created() {
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                this.$router.push('/')
+            }
+        })
     },
     updated() {
         if(this.refreshed){
