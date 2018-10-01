@@ -23,6 +23,13 @@
                     </li>
                 </div>
             </article>
+            <div class="Message">
+            <article class="message is-info">
+                <div class="message-header">
+                    <p>Skips from {{activeCategory}}:</p>
+                </div>
+            </article>
+            </div>
         </div>
         <!-- Header for 'All' skips that are NOT completed -->
         <div class="Message" v-else>

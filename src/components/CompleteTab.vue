@@ -18,7 +18,7 @@
                         <strong> Dept: </strong> {{ skip.dept }} 
                     </div>
                     <div class="column is-one-fifth">
-                        <div class="buttons is-right">
+                        <div class="buttons is-right" v-if="currentUser && currentUser == 'skoncz@jeldwen.com'">
                             <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
                         </div>
                     </div>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 import { db } from "../main"
 import EventBus from '../event-bus'
 
@@ -41,10 +42,12 @@ export default {
     data() {
         return {
             skips: [],
+            currentUser: ''
         }
     },
     mounted() {
         this.initAll()
+        this.currentUser = firebase.auth().currentUser.email
     },
     firestore() {
         if(this.$props.category != 'All') {
