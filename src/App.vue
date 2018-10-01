@@ -412,7 +412,8 @@ export default {
             /* Assigns skip as complete */
             this.selectedSkip.completed = true
             db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
-                completed: true
+                completed: true,
+                completeDate: firebase.firestore.FieldValue.serverTimestamp()
             })
             db.collection('categories').doc(this.selectedSkip.parent).update({
                     count: skipCount - 1
