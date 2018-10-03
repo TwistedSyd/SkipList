@@ -89,7 +89,7 @@ export default {
                     db.collection('categories').doc(categoryID).collection('skips').where('completed', '==', true).get()
                         .then((querySnapshot) => {
                             querySnapshot.forEach((collection) => {
-                                if(collection){
+                                if(collection && collection.data().completeDate){
                                     this.today = firebase.firestore.Timestamp.now().seconds
                                     if(this.today - collection.data().completeDate.seconds > 172800){
                                         console.log(this.today - collection.data().completeDate.seconds)
