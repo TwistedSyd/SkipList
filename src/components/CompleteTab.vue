@@ -17,11 +17,6 @@
                         <strong> Reason for Skip: </strong> {{ skip.reason }} <br>
                         <strong> Dept: </strong> {{ skip.dept }} 
                     </div>
-                    <div class="column is-one-fifth">
-                        <div class="buttons is-right" v-if="currentUser && currentUser == 'skoncz@jeldwen.com'">
-                            <a @click="deleteSkip(skip)" class="button is-danger">Delete Skip</a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -42,7 +37,8 @@ export default {
     data() {
         return {
             skips: [],
-            currentUser: ''
+            currentUser: '',
+            today: ''
         }
     },
     mounted() {
@@ -52,16 +48,17 @@ export default {
     firestore() {
         if(this.$props.category != 'All') {
             return {
-                skips: db.collection('categories').doc(this.$props.category).collection('skips').orderBy('added', 'desc')
+                skips: db.collection('categories').doc(this.$props.category).collection('skips').where('completed', '==', true).orderBy('added', 'desc')
             }
         }
     },
     methods: {
-        deleteSkip(skip) {
+        deleteSkip(skip, parent) {
             /* Removes skip from database, if selected from 'All' category
                make sure to remove properly */
+               
             if(this.$props.category === 'All') {
-                db.collection('categories').doc(skip.category).collection('skips').doc(skip.id).delete()
+                db.collection('categories').doc(parent).collection('skips').doc(skip.id).delete()
 
                 let index
                 for(let i = 0; i < this.skips.length; i++) {
@@ -89,9 +86,16 @@ export default {
             if(this.$props.category === 'All') {
                 for (var i = 0; i < this.$props.categories.length; i++) {
                     const categoryID = this.$props.categories[i].id
-                    db.collection('categories').doc(categoryID).collection('skips').get()
+                    db.collection('categories').doc(categoryID).collection('skips').where('completed', '==', true).get()
                         .then((querySnapshot) => {
                             querySnapshot.forEach((collection) => {
+                                if(collection){
+                                    this.today = firebase.firestore.Timestamp.now().seconds
+                                    if(this.today - collection.data().completeDate.seconds > 172800){
+                                        console.log(this.today - collection.data().completeDate.seconds)
+                                        this.deleteSkip(collection, collection.data().parent)
+                                    }
+                                }
                                 this.skips.push({
                                     reason: collection.data().reason,
                                     schedule: collection.data().schedule,

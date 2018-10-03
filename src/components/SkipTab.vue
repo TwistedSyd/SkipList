@@ -83,7 +83,7 @@ export default {
     firestore() {
         if(this.$props.category != 'All') {
             return {
-                skips: db.collection('categories').doc(this.$props.category).collection('skips').orderBy('added', 'desc')
+                skips: db.collection('categories').doc(this.$props.category).collection('skips').where('completed', '==', false).orderBy('added', 'desc')
             }
         }
     },

@@ -118,7 +118,7 @@ export default {
             categories: [],
             upline: [],
             showLoader: true,
-            refreshed: true,
+            refreshed: true
         }
     },
     created() {
@@ -136,7 +136,7 @@ export default {
     },
     firestore() {
         return {
-            categories: db.collection('categories').orderBy('flow')
+            categories: db.collection('categories').orderBy('flow'),
         }
     },
     methods: {
