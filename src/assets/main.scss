@@ -6,6 +6,13 @@ $white: hsl(0, 0%, 96%);
 .tabs {
     margin-left: 5px;
 }
+.hover:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+#complete-skip {
+    width: 1000px;
+}
 #flower {
     width: 150px;
 }

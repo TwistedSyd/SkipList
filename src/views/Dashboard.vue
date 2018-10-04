@@ -15,18 +15,18 @@
         <div class="Message" v-if="activeCategory != 'All' && activeCategory != ''">
             <article class="message is-danger">
                 <div class="message-header">
-                    <p>{{activeCategory}} may be affected by Skips in the following departments:</p>
+                    <p><i class="fas fa-exclamation-triangle">&nbsp;</i>{{activeCategory}} may be affected by Skips in the following departments:</p>
                 </div>
                 <div class="message-body">
                     <li v-for="depts in upline" :key="depts.id" v-if="depts.count > 0">
-                        {{ depts.title}} ({{depts.count}}) 
+                        <span class="hover" @click="setCategory(depts.title, depts.id, depts.upline, depts.count)">{{depts.title}} ({{depts.count}})</span>
                     </li>
                 </div>
             </article>
             <div class="Message">
             <article class="message is-info">
                 <div class="message-header">
-                    <p>Skips from {{activeCategory}}:</p>
+                    <p><i class="fas fa-clipboard-list">&nbsp;</i>Skips from {{activeCategory}}:</p>
                 </div>
             </article>
             </div>
@@ -35,7 +35,7 @@
         <div class="Message" v-else>
             <article class="message is-info">
                 <div class="message-header">
-                    <p>Skips from all departments:</p>
+                    <p><i class="fas fa-clipboard-list">&nbsp;</i>Skips from all departments:</p>
                 </div>
             </article>
         </div>
@@ -66,7 +66,7 @@
         <div class="Message" v-if="activeCategory != 'All'">
             <article class="message is-success">
                 <div class="message-header">
-                    <p>Completed Skips from {{activeCategory}}:</p>
+                    <p><i class="fas fa-check-square">&nbsp;</i>Completed Skips from {{activeCategory}}:</p>
                 </div>
             </article>
         </div>
@@ -74,7 +74,7 @@
         <div class="Message" v-else>
             <article class="message is-success">
                 <div class="message-header">
-                    <p>Completed Skips from all departments:</p>
+                    <p><i class="fas fa-check-square">&nbsp;</i>Completed Skips from all departments:</p>
                 </div>
             </article>
         </div>

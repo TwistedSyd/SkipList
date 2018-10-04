@@ -16,7 +16,7 @@
                 </div>
                 <div class="field">
                     <div class="control">
-                        <button class="button is-success">Login</button>
+                        <button class="button is-success"><i class="fas fa-sign-in-alt">&nbsp;</i>Login</button>
                     </div>
                 </div>
                 <!-- Login error message (incorrect credentials) -->

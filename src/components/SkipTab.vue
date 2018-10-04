@@ -21,7 +21,7 @@
                             </div>
                             <div class="column is-one-fifth">
                                 <div class="buttons is-right">
-                                    <span class="tag is-info is-large">Selected</span>
+                                    <span class="tag is-info is-large"><i class="fas fa-clipboard">&nbsp;</i>Selected</span>
                                 </div>
                             </div>
                         </div>    
@@ -45,7 +45,7 @@
                         </div>
                         <div class="column is-one-fifth">
                             <div class="buttons is-right">
-                                <a @click="selectSkip(skip)" class="button is-info" >Select Skip</a>
+                                <a @click="selectSkip(skip)" class="button is-info"><i class="fas fa-hand-pointer">&nbsp;</i>Select Skip</a>
                             </div>
                         </div>
                     </div>    

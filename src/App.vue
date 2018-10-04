@@ -1,10 +1,15 @@
 <template>
     <div id="app">
+        <link rel="stylesheet" 
+        href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
+        integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" 
+        crossorigin="anonymous">
         <!-- Header for whole page -->
         <section class="hero is-info">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">
+                        <i class="fas fa-shipping-fast"></i>
                         Skip List | Jeld-Wen Bend Division
                     </h1>
                 </div>
@@ -18,7 +23,7 @@
                     <div class="navbar-item">
                         <div class="field is-grouped" v-if="isAuthenticated">
                             <p class="control">
-                                <button @click="logOut" class="button is-danger">Log Out</button>
+                                <button @click="logOut" class="button is-danger"><i class="fas fa-sign-out-alt">&nbsp;</i>Log Out</button>
                             </p>
                         </div>
                     </div>
@@ -31,14 +36,14 @@
                             <div class="field is-grouped">
                                 <p class="control">
                                     <router-link to="/">
-                                        <button @click="showSkipForm = !showSkipForm" class="button is-primary">Add Skip</button>
+                                        <button @click="showSkipForm = !showSkipForm" class="button is-primary"><i class="fas fa-plus-square">&nbsp;</i>Add Skip</button>
                                     </router-link>
                                 </p>
                                 <p class="control">
-                                    <button @click="showEditForm = !showEditForm" class="button is-info">Edit Skip</button>
+                                    <button @click="showEditForm = !showEditForm" class="button is-info"><i class="fas fa-edit">&nbsp;</i>Edit Skip</button>
                                 </p>
                                 <p class="control">
-                                    <button @click="showComplete = !showComplete" class="button is-success">Complete Skip</button>
+                                    <button @click="showComplete = !showComplete" class="button is-success"><i class="fas fa-check-square">&nbsp;</i>Complete Skip</button>
                                 </p>
                             </div>
                         </div>
@@ -187,49 +192,57 @@
                 </div>
             </div>
         </div> 
-        <!-- Complete skip form -->
-        <div class="modal" :class="{'is-active' : showComplete }">
-            <div class="modal-background"></div>
-            <div class="modal-content">
-                <article class="message is-danger">
-                    <div v-if="this.selectedSkip != ''">
-                        <div class="message-header">
-                            Confirm the following skip is complete:
-                        </div>
-                        <div class="message-body">
-                            <div class="columns">
-                                <div class="column is-one-third">
-                                    <strong> Schedule: </strong> {{ selectedSkip.schedule }} <br>
-                                    <strong> Sequence: </strong> {{ selectedSkip.sequence }} 
+    
+        <!-- Complete Skip Form -->
+        <div v-if="selectedSkip != ''">
+            <div class="modal" :class="{'is-active' : showComplete }">
+                <div class="modal-background"></div>
+                <div class="modal-content" id="complete-skip">
+                    <article class="message is-danger">
+                            <div class="message-header">
+                                Confirm the following skip is complete:
+                            </div>
+                            <div class="message-body">
+                                <div class="columns">
+                                    <div class="column has-border">
+                                        <strong> Schedule: </strong> {{ selectedSkip.schedule }} <br>
+                                        <strong> Sequence: </strong> {{ selectedSkip.sequence }} 
+                                    </div>
+                                    <div class="column">
+                                        <strong> Item #: </strong> {{ selectedSkip.item }} <br>
+                                        <strong> # of Units Affected: </strong> {{ selectedSkip.units }} 
+                                    </div>
+                                    <div class="column">
+                                        <strong> Reason for Skip: </strong> {{ selectedSkip.reason }} <br>
+                                        <strong> Dept: </strong> {{ selectedSkip.dept }} 
+                                    </div>
                                 </div>
-                                <div class="column is-one-third">
-                                    <strong> Item #: </strong> {{ selectedSkip.item }} <br>
-                                    <strong> # of Units Affected: </strong> {{ selectedSkip.units }} 
-                                </div>
-                                <div class="column is-one-third">
-                                    <strong> Reason for Skip: </strong> {{ selectedSkip.reason }} <br>
-                                    <strong> Dept: </strong> {{ selectedSkip.dept }} 
+                                <div class="field is-grouped">
+                                        <p class="control">
+                                            <button class="button is-success" @click="getCount">Complete</button>
+                                        </p>
+                                        <p class="control">
+                                            <button class="button is-danger" @click="showComplete = !showComplete">Cancel</button>
+                                        </p>
                                 </div>
                             </div>
-                            <div class="field is-grouped">
-                                    <p class="control">
-                                        <button class="button is-success" @click="getCount">Complete</button>
-                                    </p>
-                                    <p class="control">
-                                        <button class="button is-danger" @click="showComplete = !showComplete">Cancel</button>
-                                    </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-else>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <div v-else>
+            <div class="modal" :class="{'is-active' : showComplete }">
+                <div class="modal-background"></div>
+                <div class="modal-content">
+                    <article class="message is-danger">
                         <div class="message-header">
                             <strong>You need select a skip to complete it.</strong>
                         </div>
                         <div class="message-body has-text-centered">
                                 <button class="button is-info" @click="showComplete = !showComplete" >Okay</button>
                         </div>  
-                    </div>
-                </article>
+                    </article>
+                </div>
             </div>
         </div>
         <router-view/>
