@@ -103,7 +103,7 @@ export default {
             return 0
         },
         initAll() {
-            /* Lists skips from all departments (categories) */
+            /* Gets skips from all departments (categories) */
             if(this.$props.category === 'All') {
                 for (var i = 0; i < this.$props.categories.length; i++) {
                     const categoryID = this.$props.categories[i].id

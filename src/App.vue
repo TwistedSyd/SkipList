@@ -338,9 +338,9 @@ export default {
             const skip = {
 
                 parent: this.category,
-                schedule: this.schedule,
-                sequence: this.sequence,
-                item: this.item,
+                schedule: this.schedule.toUpperCase(),
+                sequence: this.sequence.toUpperCase(),
+                item: this.item.toUpperCase(),
                 units: this.units,
                 dept: dept,
                 reason: this.reason,
@@ -392,9 +392,9 @@ export default {
                 this.editedSkip.reason = this.otherReason
             }
             db.collection('categories').doc(this.selectedSkip.parent).collection('skips').doc(this.selectedSkip.id).update({
-                schedule: this.editedSkip.schedule,
-                sequence: this.editedSkip.sequence,
-                item: this.editedSkip.item,
+                schedule: this.editedSkip.schedule.toUpperCase(),
+                sequence: this.editedSkip.sequence.toUpperCase(),
+                item: this.editedSkip.item.toUpperCase(),
                 units: this.editedSkip.units,
                 reason: this.editedSkip.reason
             })
