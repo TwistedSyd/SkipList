@@ -10,7 +10,7 @@
                 <div class="container">
                     <h1 class="title">
                         <i class="fas fa-shipping-fast"></i>
-                        Skip List | Jeld-Wen Bend Division
+                        Skip List | Production Skip Tracker
                     </h1>
                 </div>
             </div>
